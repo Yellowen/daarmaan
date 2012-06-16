@@ -58,23 +58,6 @@ header {
     float:left;
 }
 
-#logo{
-    width: 800px;
-    color: #eeeeec;
-    font-size: 200px;
-    padding: 0px;
-    padding-top: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    background: url('/statics/image/bg.png') no-repeat 330px 0px transparent;
-    font-family: "DejaVu Sans";
-    letter-spacing: -30px;
-    height: 400px;
-    font-weight: 700;
-    //text-indent: -9999px;
-}
-
 nav{
     width:auto;
     height:44px;

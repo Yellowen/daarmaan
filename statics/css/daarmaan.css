@@ -1,7 +1,7 @@
 
 /* form elements */
 form {
-    margin: 10px; 
+    margin: 0 10px;
     padding: 15px 25px 25px 20px;
 }
 
@@ -51,5 +51,18 @@ input:focus, select:focus, textarea:focus {
 label {
     padding: 0 10px;
     text-transform:capitalize;
+}
+
+.msg {
+    padding: 5px;
+
+    font-size: 10px;
+    color: #a8a8a8;
+    
+}
+
+.error {
+    color: #ef2929;
+}
 /* end - form elements */
 

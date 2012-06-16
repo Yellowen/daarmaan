@@ -13,19 +13,21 @@
 
 {% block content %}
 <section id="content">
-<div id="boxes">
+
   
   <div class="loginbox">
-    <h2>Yellowen Login</h2>
-    <form action="{% url login %}" method="POST">{% csrf_token %}
+    <h2 align="center">Yellowen Login</h2>
+      <p class="msg {{ msgclass }}" align="center">{{ msg }}</p>
+    <form action="{% url home %}" method="POST">{% csrf_token %}
+
     {% for field in loginform %}
     <p><label>{{ field.label }}</label>{{ field }}</p>
+
     {% endfor %}
-    <p align="center"><input type="submit" class="button" value="{% trans 'login' %}"></p>
+    <p align="center"><input type="submit" name="submit" class="button" value="{% trans 'login' %}"></p>
     </form>
   </div>
   
-</div>
 </section>
 
 {% endblock %}

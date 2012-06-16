@@ -21,11 +21,13 @@ from django.conf.urls import patterns, include, url
 
 
 urlpatterns = patterns('',
-    url(r"^$", "gauth.views.general.index", name="home"),
-    url(r"^login/$", "gauth.views.auth.login", name="login"),
+    url(r"^login/$", "gauth.views.general.login_view", name="login"),
+    url(r'^my/$', "gauth.views.general.dashboard", name="dashboard"),
 
     url(r"^gstatics/$", "gauth.views.statics.serv_statics",
         name="statics-serv"),
     url(r"^jsonp/validate/$", "gauth.views.statics.ajax_widget_jsonp",
         name="ajax-widget-jsonp"),
+    url(r"^$", "gauth.views.general.index", name="home"),
+
 )

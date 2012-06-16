@@ -18,12 +18,58 @@
 # -----------------------------------------------------------------------------
 
 from django.shortcuts import render_to_response as rr
+from django.shortcuts import redirect
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login
+from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 
 from gauth.forms import LoginForm
 
 
+def dashboard(request):
+    return HttpResponse()
+
+
+def login_view(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    form = LoginForm(request.POST)
+
+    user = authenticate(username=username,
+                        password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            return redirect(reverse("gauth.views.general.dashboard", args=[]))
+        else:
+            return rr("index.html", {"loginform": form,
+                                     "msgclass": "error",
+                                     "msg": _("Your account is disabled.")},
+                          context_instance=RequestContext(request))
+
+    else:
+        return rr("index.html", {"loginform": form,
+                                 "msgclass": "error",
+                                 "msg": _("Username or Password is invalid.")},
+                  context_instance=RequestContext(request))
+
+
+def pre_register(request):
+    return HttpResponse()
+
+
 def index(request):
-    form = LoginForm()
-    return rr("index.html", {"loginform": form},
-              context_instance=RequestContext(request))
+    """
+    Main page.
+    """
+    if request.method == "POST":
+        if request.POST["submit"] == "login":
+            return login_view(request)
+        else:
+            return pre_register(request)
+    else:
+        form = LoginForm()
+        return rr("index.html", {"loginform": form},
+                  context_instance=RequestContext(request))

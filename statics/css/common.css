@@ -116,13 +116,14 @@ footer a {
     Background: #fff;
     border-radius: 5px;
     width: 420px;
-    height: 250px;
+    height: 280px;
     padding: 10px;
-    margin: 100px auto 0 auto;
+    margin: 0px auto 0 auto;
 }
 
 .loginbox h2{
     text-shadow: 0 0 1px #a1a1a1;
     font-size: 48px;
     font-weight: 700;
+    padding: 10px 0 20px 0;
 }
