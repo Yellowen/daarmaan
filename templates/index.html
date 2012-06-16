@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{ block.super }} | {% trans 'Login' %}
+{% endblock %}
+
+
+{% block pagetitle %}
+{% endblock %}
+
+
+
+{% block content %}
+<section id="content">
+<div id="boxes">
+  
+  <div class="loginbox">
+    <h2>Yellowen Login</h2>
+    <form action="{% url login %}" method="POST">{% csrf_token %}
+    {% for field in loginform %}
+    <p><label>{{ field.label }}</label>{{ field }}</p>
+    {% endfor %}
+    <p align="center"><input type="submit" class="button" value="{% trans 'login' %}"></p>
+    </form>
+  </div>
+  
+</div>
+</section>
+
+{% endblock %}

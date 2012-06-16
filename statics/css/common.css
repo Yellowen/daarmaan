@@ -1,0 +1,128 @@
+html {
+    width: 100%;
+    height: 100%;
+
+}
+
+body {
+    width: 100%;
+    height: 100%;
+}
+a { 
+    text-decoration: none;
+}
+a:hover {
+    
+}
+h1, h2, h3, h4 {
+    font: bold 1em/1.5em;
+    padding: 10px 15px 7px 15px;	 
+}
+h1 { font-size: 3.0em; font-weight: normal; letter-spacing: -2px; }
+h2 {
+    font-size: 2.8em;
+    font-weight: normal; 
+    letter-spacing: -2px;
+}
+h3 { font-size: 2em; font-weight: normal; letter-spacing: -0.5px; padding-top: 15px}
+
+strong { font-weight: bold; }
+
+/* Lists */
+ol,ul {
+    margin-left: 15px;
+    padding: 0px;
+}
+ul { list-style: disc; }
+ol { list-style: decimal; }
+
+dt {
+    font-weight: bold;
+}
+dd {
+    padding-left: 25px; 
+}
+
+p, dl { padding: 10px 15px; }
+
+/* Images */
+img {
+    background: #FAFAFA;
+    border: 1px solid #DCDCDC;
+    padding: 8px;
+}
+img.float-right {
+    margin: 5px 0px 10px 10px;  
+}
+img.float-left {
+    margin: 5px 10px 10px 0px;
+}
+
+/* start - table */
+table {
+    border-collapse: collapse;
+    margin: 10px;		
+}
+
+tr { }
+
+th, td {
+    text-align: left;			
+    border-width: 1px;
+    border-style: solid;
+}
+th {
+    padding: .8em 1em;
+}
+td {	
+    padding: .7em 1em;	
+}	
+/* end - table */
+
+
+.pagecontent {
+    border-radius: 5px;
+    Background: #fff;
+    width: 80%;
+    min-height: 300px;
+    margin: 30px auto 0 auto;
+    padding: 20px;
+}
+
+footer {
+
+    border-top: 1px solid #999994;
+    height: 20px;
+    width:100%;
+    padding: 0;
+    color: #aaaaa9;
+    Background: #1f1f1f;
+    top: 97%;
+    margin-top: auto;
+    position: absolute;
+
+}
+footer a {
+    color: #fff;
+}
+
+#fcontent {
+    padding: 0 0 0 0px;
+    clear: both;
+    width: 100%;
+}
+
+.loginbox {
+    Background: #fff;
+    border-radius: 5px;
+    width: 420px;
+    height: 250px;
+    padding: 10px;
+    margin: 100px auto 0 auto;
+}
+
+.loginbox h2{
+    text-shadow: 0 0 1px #a1a1a1;
+    font-size: 48px;
+    font-weight: 700;
+}

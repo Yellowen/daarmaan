@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% load i18n %}
+
+{% block head %}
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<link REL="SHORTCUT ICON" HREF="{{ MEDIA_URL }}images/favorite.ico">
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/fonts.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/common.css" />
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% if LANGUAGE_BIDI %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/common_bidi.css" />
+{% else %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/common_nonbidi.css" />
+{% endif %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/daarmaan.css" />
+
+<title>{% block title %}{% trans 'Daarmaan' %} {% endblock %}</title>
+
+{% endblock %}
+</head>
+
+
+<body>
+  <header>
+    <div class="inner-box">
+
+      <div id="nav">
+	<nav>
+	  <ul>
+	    <li><a href="/page/about/">{% trans "What is Daarmaan?" %}</a></li>
+	    
+	  </ul>
+	</nav>
+      </div>
+
+    </div>
+  </header>
+
+  {% block header-home %}
+  {% endblock %}
+
+
+      {% block content %}
+      {% endblock %}
+
+  <footer>
+    {% block footer %}
+
+    <section id="fcontent">
+      <p id="copyrighted">© {% trans '2012 Yellowen Inc.' %}</p>
+      <p id="version">Version: {{ VERSION }} | Python: {{ PYVERSION }} | Django: {{ DJVERSION }}</p>
+    </section>
+
+    {% endblock %}
+  </footer>
+</body>
+</html>
