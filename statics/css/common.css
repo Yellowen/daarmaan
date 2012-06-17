@@ -60,17 +60,12 @@ img.float-left {
 
 /* start - table */
 table {
-    border-collapse: collapse;
+
     margin: 10px;		
 }
 
 tr { }
 
-th, td {
-    text-align: left;			
-    border-width: 1px;
-    border-style: solid;
-}
 th {
     padding: .8em 1em;
 }
@@ -112,18 +107,3 @@ footer a {
     width: 100%;
 }
 
-.loginbox {
-    Background: #fff;
-    border-radius: 5px;
-    width: 420px;
-    height: 280px;
-    padding: 10px;
-    margin: 0px auto 0 auto;
-}
-
-.loginbox h2{
-    text-shadow: 0 0 1px #a1a1a1;
-    font-size: 48px;
-    font-weight: 700;
-    padding: 10px 0 20px 0;
-}

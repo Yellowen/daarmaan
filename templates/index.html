@@ -12,22 +12,61 @@
 
 
 {% block content %}
+{{ regform.media }}
 <section id="content">
 
-  
   <div class="loginbox">
-    <h2 align="center">Yellowen Login</h2>
+    <div id="loginform">
+      <h2 align="center">Yellowen Login</h2>
       <p class="msg {{ msgclass }}" align="center">{{ msg }}</p>
-    <form action="{% url home %}" method="POST">{% csrf_token %}
 
-    {% for field in loginform %}
-    <p><label>{{ field.label }}</label>{{ field }}</p>
+      <form action="{% url home %}" method="POST">{% csrf_token %}
 
-    {% endfor %}
-    <p align="center"><input type="submit" name="submit" class="button" value="{% trans 'login' %}"></p>
-    </form>
+	<table id="logintable">
+	  <tr>
+	    <td><label>{% trans 'username' %}:</label></td><td><input type="text" maxlength="32" value="lxsameer" name="username" id="id_username"></td>
+	  </tr>
+	  <tr>
+	    <td><label>{% trans 'password' %}:</label></td><td> <input type="password" maxlength="64" name="password" id="id_password"></td>
+	  </tr>
+	  <tr id="submitrow">
+	    <td><input type="submit" value="{% trans 'login' %}" class="button middle" name="submit" ></td><td><input type="checkbox" id="id_remember_me" name="remember_me"><span id="remember">Remember me</span></td>
+	  </tr>
+	</table>
+	<input type="hidden" value="login" name="form">
+      </form>
+    </div>
+
+
+
+    <div id="registerform">
+      <h2 align="center">Register an account</h2>
+      <p class="msg {{ msgclass }}" align="center">{{ msg }}</p>
+      <form action="{% url home %}" method="POST">{% csrf_token %}
+	<table id="logintable">
+	  {% for field in regform %}
+	  <tr>
+	    <td><label>{{ field.label }}:</label></td><td>{{ field }}<p class="msg error">{{ field.error }}</p></td>
+	  </tr>
+	  {% endfor %}
+	</table>
+	<input type="hidden" value="register" name="form">
+	<p align="center"><input type="submit" value="{% trans 'Register' %}" class="button middle" name="submit" ></p>
+
+      </form>
+    </div>
+
   </div>
-  
+
+
+<div id="tabs">
+<div id="logintab" class="tab selectedtab">
+  Login
+</div>
+<div id="registertab" class="tab unselected">
+  Register
+</div>
+</div>
 </section>
 
 {% endblock %}

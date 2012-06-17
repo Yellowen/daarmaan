@@ -25,7 +25,7 @@ from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 
-from gauth.forms import LoginForm
+from gauth.forms import PreRegistrationForm
 
 
 def dashboard(request):
@@ -35,7 +35,10 @@ def dashboard(request):
 def login_view(request):
     username = request.POST['username']
     password = request.POST['password']
-    form = LoginForm(request.POST)
+    remember = request.POST.get("remember_me", False)
+    form = PreRegistrationForm()
+    if remember:
+        request.session.set_expiry(0)
 
     user = authenticate(username=username,
                         password=password)
@@ -44,13 +47,13 @@ def login_view(request):
             login(request, user)
             return redirect(reverse("gauth.views.general.dashboard", args=[]))
         else:
-            return rr("index.html", {"loginform": form,
+            return rr("index.html", {"regform": form,
                                      "msgclass": "error",
                                      "msg": _("Your account is disabled.")},
                           context_instance=RequestContext(request))
 
     else:
-        return rr("index.html", {"loginform": form,
+        return rr("index.html", {"regform": form,
                                  "msgclass": "error",
                                  "msg": _("Username or Password is invalid.")},
                   context_instance=RequestContext(request))
@@ -65,11 +68,12 @@ def index(request):
     Main page.
     """
     if request.method == "POST":
-        if request.POST["submit"] == "login":
+        if request.POST["form"] == "login":
             return login_view(request)
         else:
             return pre_register(request)
     else:
-        form = LoginForm()
-        return rr("index.html", {"loginform": form},
+        form = PreRegistrationForm()
+        print ">>> ", form.__dict__
+        return rr("index.html", {"regform": form},
                   context_instance=RequestContext(request))

@@ -35,12 +35,15 @@ class AjaxWidget(forms.TextInput):
         super(AjaxWidget, self).__init__(*args, **kwargs)
 
     def _media(self):
-        return forms.Media(
+        a = forms.Media(
             css={'all': ('ajaxwidget.css',)},
             js=(
                 reverse("gauth.views.statics.ajax_widget_jsonp",
                     args=[]) + "?validator=%s" % urllib.urlencode(self.url), ))
-    media = property(_media)
+        print "]]]] ", a
+        return a
+
+    Media = property(_media)
 
 
 class LoginForm(forms.Form):
@@ -49,6 +52,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=64,
                                label=_("password"),
                                widget=forms.PasswordInput())
+    remember_me = forms.BooleanField(label=_("Remember me"))
 
 
 class PreRegistrationForm(forms.Form):
