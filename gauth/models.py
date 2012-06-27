@@ -32,6 +32,7 @@ class Service(models.Model):
 
     active = models.NullBooleanField(_("active"),
                                 default=False)
+
     user = models.ForeignKey('auth.User', verbose_name=_("User"))
 
     class Meta:

@@ -17,22 +17,12 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
 
-from django.conf.urls import patterns, include, url
+from django.contrib import admin
+from models import Service
 
 
-urlpatterns = patterns('',
-    url(r'^authenticate/$', "gauth.views.general.remote_auth",
-        name="remote-auth"),
-    url(r'^verification/$', "gauth.views.general.remote_verify",
-        name="remote-auth"),
+class ServiceAdmin (admin.ModelAdmin):
+    pass
 
-    url(r"^login/$", "gauth.views.general.login_view", name="login"),
-    url(r'^my/$', "gauth.views.general.dashboard", name="dashboard"),
 
-    url(r"^gstatics/$", "gauth.views.statics.serv_statics",
-        name="statics-serv"),
-    url(r"^jsonp/validate/$", "gauth.views.statics.ajax_widget_jsonp",
-        name="ajax-widget-jsonp"),
-    url(r"^$", "gauth.views.general.index", name="home"),
-
-)
+admin.site.register(Service, ServiceAdmin)
