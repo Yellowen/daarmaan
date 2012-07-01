@@ -19,12 +19,10 @@
 
 from django.conf.urls import patterns, include, url
 
+from gauth.views.sso import daarmaan_service
+
 
 urlpatterns = patterns('',
-    url(r'^authenticate/$', "gauth.views.general.remote_auth",
-        name="remote-auth"),
-    url(r'^verification/$', "gauth.views.general.remote_verify",
-        name="remote-auth"),
 
     url(r"^login/$", "gauth.views.general.login_view", name="login"),
     url(r'^my/$', "gauth.views.general.dashboard", name="dashboard"),
@@ -35,4 +33,6 @@ urlpatterns = patterns('',
         name="ajax-widget-jsonp"),
     url(r"^$", "gauth.views.general.index", name="home"),
 
+    #url(r'^', include("gauth.views.sso.daarmaan_service.urls")),
+    url(r'^', include(daarmaan_service.urls)),
 )
