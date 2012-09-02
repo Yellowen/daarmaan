@@ -33,6 +33,5 @@ urlpatterns = patterns('',
         name="ajax-widget-jsonp"),
     url(r"^$", "gauth.views.general.index", name="home"),
 
-    #url(r'^', include("gauth.views.sso.daarmaan_service.urls")),
     url(r'^', include(daarmaan_service.urls)),
 )

@@ -18,7 +18,6 @@
 # -----------------------------------------------------------------------------
 
 import json
-import pickle
 import urllib
 import hashlib
 from urlparse import urlparse
@@ -26,32 +25,42 @@ from urlparse import urlparse
 from django.conf.urls import patterns, include, url
 from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from django.contrib.sessions.models import Session
 from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseForbidden)
+from django.conf import settings
+from vakhshour.base import Node
+
 from gauth.models import Service
 
 
 class DaarmaanServer(object):
     """
-    Daarmaan SSO service server class.
+    Daarmaan SSO service server class. This class take care of SSO activities.
     """
+
+    node = Node()
 
     @property
     def urls(self):
+        """
+        Url dispatcher property.
+        """
         urlpatterns = patterns('',
                 url(r'^authenticate/$', self.authenticate,
                     name="remote-auth"),
                 url(r'^verification/$', self.verify,
                     name="remote-auth"),
-                #url(r"^login/$", self.login_view,
-                #    name="login"),
+                url(r"^logout/$", self.logout,
+                    name="logout"),
                 )
         return urlpatterns
 
     def authenticate(self, request):
         """
-        Check the request for authenticated user.
+        Check the request for authenticated user. If user is not authenticated then redirect
+        user to login view.
         """
 
         next_url = request.GET.get("next", None)
@@ -65,6 +74,9 @@ class DaarmaanServer(object):
 
         # Does user authenticated before?
         if request.user.is_authenticated():
+
+            # If user is authenticated in Daarmaan then a ticket (user session ID)
+            # will send back to service
             ticket = request.session.session_key
 
             params = {'ticket': ticket,
@@ -73,15 +85,15 @@ class DaarmaanServer(object):
             next_url = "%s?%s" % (next_url.geturl(), urllib.urlencode(params))
 
         else:
-            print "asdasd ", request.session.__dict__
-            params = {"ack": request.session.session_key}
+            # If user is not authenticated simple ack answer will return
+            params = {"ack": ""}
             next_url = "%s?%s" % (next_url.geturl(), urllib.urlencode(params))
 
         return HttpResponseRedirect(next_url)
 
     def verify(self, request):
         """
-        verify the user token that friend server sent.
+        verify the user token that friend service sent.
         """
 
         hash_ = request.GET.get("hash", None)
@@ -96,52 +108,56 @@ class DaarmaanServer(object):
 
         try:
             session = Session.objects.get(session_key=token)
+
         except Session.DoesNotExist:
             pass
 
         uid = session.get_decoded().get('_auth_user_id')
         user = User.objects.get(pk=uid)
 
-        #if user.is_authenticated():
+        m = hashlib.sha1()
+        if user.is_authenticated():
             # TODO: Add more details in this dict
-            ## a = {"username": user.username,
-            ##      "first_name": user.first_name,
-            ##      "last_name": user.last_name,
-            ##      "email": user.email,
-            ##      "id": user.pk,
-            ##      "is_stuff": user.is_stuff,
-            ##      "is_active": user.is_active,
-            ##      }
-            #a = pickle.dumps(user, 2)
-            #m.update(user + service.key)
-        #else:
-        #a = {"username": ""}
-        #    m = None
-        a = pickle.dumps(user)
+            a = {
+                "id": user.id,
+                "username": user.username,
+                 "first_name": user.first_name,
+                 "last_name": user.last_name,
+                 "email": user.email,
+                 "id": user.pk,
+                 "is_staff": user.is_staff,
+                 "is_active": user.is_active,
+                 }
+            m.update(user.username + service.key)
+        else:
+            a = {"username": ""}
+            m = None
 
         # TODO: rethink this terminology
         result = {"data": a}
-        #if m:
-        result.update({"hash": self._checksum(service, a)})
-        #else:
-        #    result.update({"hash": ""})
+        if m:
+            result.update({"hash": m.hexdigest()})
+        else:
+            result.update({"hash": ""})
 
         return HttpResponse(json.dumps(result))
 
-    ## def logout(self, request):
+    def logout(self, request):
 
-    ##     next_url = request.GET.get("next", None)
-    ##     service = request.GET.get("service", None)
-    ##     if request.user.is_authenticated():
-    ##         logout(request)
+        next_url = request.GET.get("next", None)
+        service = request.GET.get("service", None)
+        print ">>> ", request.user.is_authenticated()
+        if request.user.is_authenticated():
+            logout(request)
 
-    ##     if not next_url:
-    ##         next_url = request.META.get("HTTP_REFERER", None)
+        print ">>> ", request.user.is_authenticated()
+        if not next_url:
+            next_url = request.META.get("HTTP_REFERER", None)
 
-    ##     if not next_url:
-    ##         next_url = "/"
+        if not next_url:
+            next_url = "/"
 
-    ##     return HttpResponseRedirect(next_url)
+        return HttpResponseRedirect(next_url)
 
     def _get_service(self, request):
         """

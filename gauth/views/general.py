@@ -91,7 +91,7 @@ def index(request):
     Main page.
     """
     if request.user.is_authenticated():
-        return HttpResponseRedirect("/my/")
+        return HttpResponseRedirect(reverse('dashboard'))
 
     if request.method == "POST":
         if request.POST["form"] == "login":

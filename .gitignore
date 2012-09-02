@@ -1,3 +1,4 @@
 db
 page/
 *.pyc
+tmp/
