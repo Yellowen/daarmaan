@@ -1,4 +1,21 @@
-# Django settings for daarmaan project.
+# -----------------------------------------------------------------------------
+#    Daarmaan - Single Sign On Service for Yellowen
+#    Copyright (C) 2012 Yellowen
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License along
+#    with this program; if not, write to the Free Software Foundation, Inc.,
+#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# -----------------------------------------------------------------------------
 import os
 
 ROOT = os.path.dirname(__file__)
@@ -15,7 +32,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db',
+        'NAME': 'database/db',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -62,7 +79,7 @@ MEDIA_URL = '/statics/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(ROOT, "../statics/auto/")
+STATIC_ROOT = os.path.join(ROOT, "statics/auto/")
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -70,7 +87,7 @@ STATIC_URL = '/statics/auto/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(ROOT, "../statics/").replace("\\", "/"),
+    os.path.join(ROOT, "statics/").replace("\\", "/"),
 )
 
 # List of finder classes that know how to find static files in
@@ -102,13 +119,13 @@ MIDDLEWARE_CLASSES = (
 )
 
 
-ROOT_URLCONF = 'daarmaan.urls'
+ROOT_URLCONF = 'daarmaaninterface.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'daarmaan.wsgi.application'
+WSGI_APPLICATION = 'daarmaaninterface.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(ROOT, "../templates/").replace("\\", "/"),
+    os.path.join(ROOT, "templates/").replace("\\", "/"),
 )
 
 INSTALLED_APPS = (
@@ -119,7 +136,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'gauth',
+    'daarmaan.server',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -169,7 +186,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "daarmaan.projinfo.info",
 )
 
-VERSION = "0.1.0"
+VERSION = "0.2.1"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 1209600
 ## SESSION_COOKIE_DOMAIN =  ".yellowen.com"
