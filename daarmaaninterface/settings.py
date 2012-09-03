@@ -32,7 +32,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'database/db',
+        'NAME': 'daarmaaninterface/database/db',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
