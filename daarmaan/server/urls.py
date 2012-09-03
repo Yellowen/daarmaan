@@ -19,19 +19,21 @@
 
 from django.conf.urls import patterns, include, url
 
-from gauth.views.sso import daarmaan_service
+from daarmaan.server.views.sso import daarmaan_service
 
 
 urlpatterns = patterns('',
 
-    url(r"^login/$", "gauth.views.general.login_view", name="login"),
-    url(r'^my/$', "gauth.views.general.dashboard", name="dashboard"),
+    url(r"^login/$", "daarmaan.server.views.general.login_view", name="login"),
+    url(r'^my/$', "daarmaan.server.views.general.dashboard", name="dashboard"),
 
-    url(r"^gstatics/$", "gauth.views.statics.serv_statics",
+    url(r"^gstatics/$", "daarmaan.server.views.statics.serv_statics",
         name="statics-serv"),
-    url(r"^jsonp/validate/$", "gauth.views.statics.ajax_widget_jsonp",
+    url(r"^jsonp/validate/$",
+        "daarmaan.server.views.statics.ajax_widget_jsonp",
         name="ajax-widget-jsonp"),
-    url(r"^$", "gauth.views.general.index", name="home"),
+
+    url(r"^$", "daarmaan.server.views.general.index", name="home"),
 
     url(r'^', include(daarmaan_service.urls)),
 )

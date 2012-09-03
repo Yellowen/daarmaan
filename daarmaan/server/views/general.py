@@ -29,8 +29,8 @@ from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseForbidden)
 from django.contrib.auth.decorators import login_required
 
-from gauth.forms import PreRegistrationForm
-from gauth.models import Profile, Service
+from daarmaan.server.forms import PreRegistrationForm
+from daarmaan.server.models import Profile, Service
 
 
 @login_required
@@ -66,7 +66,9 @@ def login_view(request):
             if next_url:
                 return HttpResponseRedirect("/")
 
-            return redirect(reverse("gauth.views.general.dashboard", args=[]))
+            return redirect(reverse(
+                "daarmaan.server.views.general.dashboard",
+                args=[]))
         else:
             return rr("index.html", {"regform": form,
                                      "msgclass": "error",

@@ -2,3 +2,5 @@ db
 page/
 *.pyc
 tmp/
+build/
+dist/

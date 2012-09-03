@@ -27,7 +27,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.signals import user_logged_in
 
-from dauth.models import SSOSession
+from daarmaan.client.models import SSOSession
 
 
 class HttpResponseRedirectAuth(HttpResponsePermanentRedirect):

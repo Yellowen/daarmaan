@@ -29,12 +29,12 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 
-    url(r"^", include("gauth.urls")),
+    url(r"^", include("daarmaan.server.urls")),
     url(r'^admin/', include(admin.site.urls)),
 )
 
 urlpatterns += patterns('',
         (r'^statics/(?P<path>.*)$', 'django.views.static.serve',
          {'document_root': os.path.join(os.path.dirname(__file__),\
-                                        '../statics').replace('\\', '/')}),
+                                        'statics').replace('\\', '/')}),
 )

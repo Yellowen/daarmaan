@@ -32,7 +32,7 @@ from django.http import (HttpResponse, HttpResponseRedirect,
 from django.conf import settings
 from vakhshour.base import Node
 
-from gauth.models import Service
+from daarmaan.server.models import Service
 
 
 class DaarmaanServer(object):

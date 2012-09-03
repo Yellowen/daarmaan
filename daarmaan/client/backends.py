@@ -30,10 +30,17 @@ from django.contrib.auth.models import User, check_password
 
 class DaarmaanBackend(object):
     """
-    Authenticate against the Daarmaan gauth.
+    Authenticate against the Daarmaan SSO. This class is Django
+    authentication backend.
     """
+
+    #: Current client service name
     service = settings.SERVICE_NAME
+
+    #: Client service key
     key = settings.SERVICE_KEY
+
+    #: Daarmaan server url
     daarmaan = settings.DAARMAAN_SERVER
 
     def authenticate(self, **kwargs):

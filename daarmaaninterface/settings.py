@@ -183,7 +183,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
-    "daarmaan.projinfo.info",
+    "daarmaaninterface.projinfo.info",
 )
 
 VERSION = "0.2.1"
