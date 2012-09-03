@@ -30,10 +30,13 @@ class Service(models.Model):
     key = models.CharField(_("key"),
                            max_length=256)
 
-    active = models.NullBooleanField(_("active"),
+    active = models.BooleanField(_("active"),
                                 default=False)
 
     user = models.ForeignKey('auth.User', verbose_name=_("User"))
+
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         verbose_name = _("service")
@@ -45,11 +48,14 @@ class Profile(models.Model):
     User profile model.
     """
 
-    User = models.ForeignKey("auth.User",
+    user = models.ForeignKey("auth.User",
                                     verbose_name=_("permissions"))
 
-    Services = models.ForeignKey(Service,
-                                 verbose_name=_("service"))
+    services = models.ManyToManyField(Service,
+                                      verbose_name=_("service"))
+
+    def __unicode__(self):
+        return self.user.username
 
     class Meta:
         verbose_name = _("profile")

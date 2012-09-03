@@ -18,11 +18,17 @@
 # -----------------------------------------------------------------------------
 
 from django.contrib import admin
-from models import Service
+from models import Service, Profile
 
 
 class ServiceAdmin (admin.ModelAdmin):
-    pass
+    list_display = ("name", "key", "active", "user")
+    list_editable = ("active", )
+
+
+class ProfileAdmin (admin.ModelAdmin):
+    list_display = ("user", )
 
 
 admin.site.register(Service, ServiceAdmin)
+admin.site.register(Profile, ProfileAdmin)
