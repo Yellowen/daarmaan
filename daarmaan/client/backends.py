@@ -27,6 +27,8 @@ from urllib import urlencode
 from django.conf import settings
 from django.contrib.auth.models import User, check_password
 
+from daarmaan.utils import DefaultValidation
+
 
 class DaarmaanBackend(object):
     """
@@ -42,6 +44,10 @@ class DaarmaanBackend(object):
 
     #: Daarmaan server url
     daarmaan = settings.DAARMAAN_SERVER
+
+    #: Default validator instance that is responsible for signing and
+    #: validating data
+    validator = DefaultValidation(key)
 
     def authenticate(self, **kwargs):
         """
@@ -62,11 +68,12 @@ class DaarmaanBackend(object):
                 "You should provide 'request', 'token' and 'hash_' parameters"
                 )
 
-        if self.is_valid(token, hash_):
+        if self.validator.is_valid(token, hash_):
             # If token is signed with hash_
-
             data = self.validate(token)
 
+            if not data:
+                return None
             # Create a user or get the exists one
             user, created = User.objects.get_or_create(
                 username=data["username"]
@@ -92,29 +99,15 @@ class DaarmaanBackend(object):
         except User.DoesNotExist:
             return None
 
-    def is_valid(self, token, hash_):
-        """
-        Check for token and hash integrity.
-        """
-        key = settings.SERVICE_KEY
-        m = hashlib.sha1()
-        m.update(token + key)
-        if hash_ == m.hexdigest():
-            return True
-        return False
-
     def validate(self, token):
         """
         Try to validate the given token for a valid user.
         """
         url = "%s/verification/" % self.daarmaan.lstrip("/")
 
-        # Create the request parameters
+        hash_ = self.validator.sign(token)
 
-        # TODO: Replace this section with a 
-        m = hashlib.sha1()
-        m.update(token + self.key)
-        hash_ = m.hexdigest()
+        # Create the request parameters
         params = {"token": token,
                   "hash": hash_,
                   "service": self.service}
@@ -135,10 +128,8 @@ class DaarmaanBackend(object):
             if json_data["hash"]:
                 hash_ = json_data["hash"]
                 data = json_data["data"]
-                m = hashlib.sha1()
-                m.update(data["username"] + self.key)
 
-                if m.hexdigest() == hash_:
+                if self.validator.is_valid(data, hash_):
                     return data
                 else:
                     # TODO: Put some logs here
@@ -148,4 +139,5 @@ class DaarmaanBackend(object):
                 return False
         else:
             # TODO: Find the best way to deal with unreachablity of Daarmaan
-            pass
+            # TODO: Add log here
+            return False
