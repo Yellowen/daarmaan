@@ -183,10 +183,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
+    # Project information contexts
     "daarmaaninterface.projinfo.info",
 )
 
+# Daarmaan Version.
 VERSION = "0.2.1"
+
+# Session will not expired with browser close
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 1209600
 ## SESSION_COOKIE_DOMAIN =  ".yellowen.com"

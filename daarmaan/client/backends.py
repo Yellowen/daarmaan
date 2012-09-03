@@ -21,8 +21,8 @@
 import pickle
 import json
 import hashlib
-from urllib import urlencode
 import urllib2
+from urllib import urlencode
 
 from django.conf import settings
 from django.contrib.auth.models import User, check_password
@@ -48,19 +48,26 @@ class DaarmaanBackend(object):
         Try to authenticate to daarmaan SSO using provided informations.
         kwargs dictionary should contains below keys:
 
-        token: Actual ticket from daarmaan
-        request: current request object
-        hash_: the SHA1 checksum provided by daarmaan.
+        .. option:: token: Actual ticket from daarmaan
+        .. option:: request: current request object
+        .. option:: hash_: the SHA1 checksum provided by daarmaan.
         """
+
         token = kwargs.get("token", None)
         request = kwargs.get("request", None)
         hash_ = kwargs.get("hash_", None)
 
         if not token or not hash_ or not request:
-            raise ValueError("You should provide 'request', 'token' and 'hash_' parameters")
+            raise ValueError(
+                "You should provide 'request', 'token' and 'hash_' parameters"
+                )
 
         if self.is_valid(token, hash_):
+            # If token is signed with hash_
+
             data = self.validate(token)
+
+            # Create a user or get the exists one
             user, created = User.objects.get_or_create(
                 username=data["username"]
                 )
@@ -73,9 +80,13 @@ class DaarmaanBackend(object):
                 user.save()
             return user
         else:
+            # If token is not valid
             return None
 
     def get_user(self, user_id):
+        """
+        Retreive and return the user object
+        """
         try:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
@@ -99,6 +110,8 @@ class DaarmaanBackend(object):
         url = "%s/verification/" % self.daarmaan.lstrip("/")
 
         # Create the request parameters
+
+        # TODO: Replace this section with a 
         m = hashlib.sha1()
         m.update(token + self.key)
         hash_ = m.hexdigest()
@@ -109,7 +122,11 @@ class DaarmaanBackend(object):
         url = "%s?%s" % (url, urlencode(params))
 
         # Send the request
-        response = urllib2.urlopen(url)
+        try:
+            response = urllib2.urlopen(url)
+        except urllib2.URLError:
+            # TODO: Handle the situation on urlerror
+            pass
 
         if response.code == 200:
             # If response returned
