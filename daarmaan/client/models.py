@@ -33,3 +33,7 @@ class SSOSession(models.Model):
     def __unicode__(self):
         return "%s = %s" % (self.session,
                             self.sso_session)
+
+    class Meta:
+        verbose_name = _("SSO Session")
+        verbose_name_plural = _("SSO sessions")
