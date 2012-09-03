@@ -1,0 +1,3 @@
+graft docs 
+graft daarmaan
+include *.py *.json *.rst *.html COPYING
