@@ -117,27 +117,33 @@ class DaarmaanBackend(object):
         # Send the request
         try:
             response = urllib2.urlopen(url)
-        except urllib2.URLError:
+        except urllib2.URLError, e:
             # TODO: Handle the situation on urlerror
-            pass
+            print ">>>> ", e
+            response = None
 
-        if response.code == 200:
-            # If response returned
-            json_data = json.loads(response.read())
+        if response:
+            if response.code == 200:
+                # If response returned
+                json_data = json.loads(response.read())
 
-            if json_data["hash"]:
-                hash_ = json_data["hash"]
-                data = json_data["data"]
+                if json_data["hash"]:
 
-                if self.validator.is_valid(data, hash_):
-                    return data
+                    hash_ = json_data["hash"]
+                    data = json_data["data"]
+
+                    if self.validator.is_valid(data["username"], hash_):
+                        return data
+                    else:
+                        # TODO: Put some logs here
+                        return False
+
                 else:
-                    # TODO: Put some logs here
                     return False
-
             else:
+                # TODO: Find the best way to deal with unreachablity
+                # of Daarmaan
+                # TODO: Add log here
                 return False
         else:
-            # TODO: Find the best way to deal with unreachablity of Daarmaan
-            # TODO: Add log here
             return False

@@ -17,35 +17,10 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
 
-import hmac
-import hashlib
+from django.conf.urls.defaults import patterns, include, url
 
 
-class HashSum(object):
-    """
-    Make a hash from data and a secret key that will represent the data health
-    in the remote side.
-    """
-
-    def __init__(self, key):
-        self.key = key
-
-    def sign(self, data, key=None):
-        """
-        Sign the data with key, and return the result checksum
-        """
-        a = hmac.new(str(self.key or key), data, hashlib.sha1)
-        return a.hexdigest()
-
-    def is_valid(self, data, checksum):
-        """
-        Check the data and checksum.
-        """
-
-        a = hmac.new(str(self.key),
-                     data,
-                     hashlib.sha1).hexdigest()
-        return a == checksum
-
-
-DefaultValidation = HashSum
+urlpatterns = patterns('',
+        url(r'^logout/$', 'daarmaan.client.views.logout',
+            name="logout"),
+)

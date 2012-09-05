@@ -16,6 +16,7 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
+
 import os
 
 ROOT = os.path.dirname(__file__)
@@ -24,7 +25,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Sameer Rahmani', 'lxsameer@gnu.org'),
 )
 
 MANAGERS = ADMINS
@@ -196,3 +197,12 @@ SESSION_COOKIE_AGE = 1209600
 ## SESSION_COOKIE_DOMAIN =  ".yellowen.com"
 ## CSRF_COOKIE_DOMAIN = "yellowen.com"
 ## SESSION_COOKIE_NAME = "sessionticket"
+
+LOGING_URL = "/login/"
+LOGOUT_URL = "/logout/"
+
+# Vakhshour configuration
+VAKHSHOUR = {
+    "host": "127.0.0.1",
+    "port": "8888",
+}

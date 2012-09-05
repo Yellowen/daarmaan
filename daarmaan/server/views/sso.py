@@ -33,6 +33,7 @@ from django.conf import settings
 from vakhshour.base import Node
 
 from daarmaan.server.models import Service
+from daarmaan.utils import DefaultValidation
 
 
 class DaarmaanServer(object):
@@ -40,7 +41,7 @@ class DaarmaanServer(object):
     Daarmaan SSO service server class. This class take care of SSO activities.
     """
 
-    node = Node()
+    node = Node(**settings.VAKHSHOUR)
 
     @property
     def urls(self):
@@ -59,8 +60,8 @@ class DaarmaanServer(object):
 
     def authenticate(self, request):
         """
-        Check the request for authenticated user. If user is not authenticated then redirect
-        user to login view.
+        Check the request for authenticated user. If user is not authenticated
+        then redirect user to login view.
         """
 
         next_url = request.GET.get("next", None)
@@ -70,17 +71,19 @@ class DaarmaanServer(object):
         if not service:
             return HttpResponseForbidden("Invalid service")
 
+        validator = DefaultValidation(service.key)
+
         next_url = urlparse(urllib.unquote(next_url).decode("utf8"))
 
         # Does user authenticated before?
         if request.user.is_authenticated():
 
-            # If user is authenticated in Daarmaan then a ticket (user session ID)
-            # will send back to service
+            # If user is authenticated in Daarmaan then a ticket
+            # (user session ID) will send back to service
             ticket = request.session.session_key
 
             params = {'ticket': ticket,
-                      "hash": self._checksum(service, ticket)}
+                      "hash": validator.sign(ticket)}
 
             next_url = "%s?%s" % (next_url.geturl(), urllib.urlencode(params))
 
@@ -103,7 +106,10 @@ class DaarmaanServer(object):
         if not hash_ or not token or not service:
             return HttpResponseForbidden()
 
-        if hash_ != self._checksum(service, token):
+        validator = DefaultValidation(service.key)
+
+
+        if not validator.is_valid(token, hash_):
             return HttpResponseForbidden()
 
         try:
@@ -115,7 +121,6 @@ class DaarmaanServer(object):
         uid = session.get_decoded().get('_auth_user_id')
         user = User.objects.get(pk=uid)
 
-        m = hashlib.sha1()
         if user.is_authenticated():
             # TODO: Add more details in this dict
             a = {
@@ -128,35 +133,41 @@ class DaarmaanServer(object):
                  "is_staff": user.is_staff,
                  "is_active": user.is_active,
                  }
-            m.update(user.username + service.key)
+            m = True
         else:
             a = {"username": ""}
-            m = None
+            m = False
 
         # TODO: rethink this terminology
         result = {"data": a}
         if m:
-            result.update({"hash": m.hexdigest()})
+            result.update({"hash": validator.sign(user.username)})
         else:
             result.update({"hash": ""})
 
         return HttpResponse(json.dumps(result))
 
     def logout(self, request):
-
+        """
+        Log the user out and send the logout event.
+        """
         next_url = request.GET.get("next", None)
         service = request.GET.get("service", None)
-        print ">>> ", request.user.is_authenticated()
+
         if request.user.is_authenticated():
             logout(request)
 
-        print ">>> ", request.user.is_authenticated()
+            # Send the logout event
+            self.node.send_event(name="logout", sender="daarmaan",
+                                 ticket=request.session.session_key)
+
         if not next_url:
             next_url = request.META.get("HTTP_REFERER", None)
 
         if not next_url:
             next_url = "/"
 
+        print ">>> !", next_url
         return HttpResponseRedirect(next_url)
 
     def _get_service(self, request):
@@ -175,14 +186,6 @@ class DaarmaanServer(object):
             return None
 
         return service
-
-    def _checksum(self, service, value):
-        """
-        Return the checksum of value plus service key.
-        """
-        m = hashlib.sha1()
-        m.update(value + service.key)
-        return m.hexdigest()
 
 
 daarmaan_service = DaarmaanServer()
