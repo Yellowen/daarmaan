@@ -167,7 +167,6 @@ class DaarmaanServer(object):
         if not next_url:
             next_url = "/"
 
-        print ">>> !", next_url
         return HttpResponseRedirect(next_url)
 
     def _get_service(self, request):

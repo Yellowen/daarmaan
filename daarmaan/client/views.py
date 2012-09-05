@@ -28,13 +28,13 @@ def logout(request):
     Logout the user and redirect him/her to daarmaan.
     """
     django_logout(request)
-
+    request.session["redirected"] = request.path.split("?")[0]
     host = "http://%s" % request.get_host()
     next_ = request.GET.get("next", host)
 
     next_url = "&%s" % urlencode({"next": next_})
 
-    url = "%s?service=%s%s" % (settings.LOGOUT_URL,
+    url = "%s?service=%s%s&ack=" % (settings.LOGOUT_URL,
                              settings.SERVICE_NAME,
                              next_url)
 

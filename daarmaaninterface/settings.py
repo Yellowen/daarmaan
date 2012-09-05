@@ -198,7 +198,7 @@ SESSION_COOKIE_AGE = 1209600
 ## CSRF_COOKIE_DOMAIN = "yellowen.com"
 ## SESSION_COOKIE_NAME = "sessionticket"
 
-LOGING_URL = "/login/"
+LOGIN_URL = "/"
 LOGOUT_URL = "/logout/"
 
 # Vakhshour configuration
