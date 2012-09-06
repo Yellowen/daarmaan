@@ -12,10 +12,7 @@ class SessionMiddleware(object):
 
     def process_request(self, request):
         engine = import_module(settings.SESSION_ENGINE)
-        ## from pprint import pprint
-        ## print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        ## pprint(request)
-        ## print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+
         print "TEST: cookies: ", request.COOKIES
         session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME, None)
         print "TEST: key: ", session_key
