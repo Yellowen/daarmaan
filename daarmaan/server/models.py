@@ -16,6 +16,8 @@
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
+import json
+
 from django.db import models
 from django.utils.translation import ugettext as _
 
@@ -45,18 +47,41 @@ class Service(models.Model):
 
 class Profile(models.Model):
     """
-    User profile model.
+    User profile model related to each service.
     """
 
     user = models.ForeignKey("auth.User",
                                     verbose_name=_("permissions"))
 
-    services = models.ManyToManyField(Service,
-                                      verbose_name=_("service"))
+    service = models.ForeignKey(Service,
+                                verbose_name=_("service"))
+
+    _profile_data = models.TextField(_("service profile"))
+
+    @property
+    def data(self):
+        return json.loads(self._profile_data)
+
+    @data.setter
+    def data(self, value):
+        self._profile_data = json.dumps(value)
+        return json.dumps(value)
 
     def __unicode__(self):
         return self.user.username
 
     class Meta:
+        unique_together = ["user", "service"]
         verbose_name = _("profile")
         verbose_name_plural = _("profiles")
+
+
+class UserServices(models.Model):
+    """
+    Services that user have access to.
+    """
+    user = models.ForeignKey("auth.User",
+                             verbose_name=_("permissions"))
+
+    services = models.ManyToManyField(Service,
+                                      verbose_name=_("service"))

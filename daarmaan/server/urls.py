@@ -25,7 +25,6 @@ from daarmaan.server.views.sso import daarmaan_service
 urlpatterns = patterns('',
 
     url(r"^login/$", "daarmaan.server.views.general.login_view", name="login"),
-    url(r'^my/$', "daarmaan.server.views.general.dashboard", name="dashboard"),
 
     url(r"^gstatics/$", "daarmaan.server.views.statics.serv_statics",
         name="statics-serv"),

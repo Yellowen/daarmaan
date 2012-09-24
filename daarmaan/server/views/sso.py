@@ -31,6 +31,7 @@ from django.http import (HttpResponse, HttpResponseRedirect,
                          HttpResponseForbidden)
 from django.conf import settings
 from vakhshour.base import Node
+from vakhshour.amp.ampy import Proxy
 
 from daarmaan.server.models import Service
 from daarmaan.utils import DefaultValidation
@@ -158,8 +159,12 @@ class DaarmaanServer(object):
             logout(request)
 
             # Send the logout event
-            self.node.send_event(name="logout", sender="daarmaan",
-                                 ticket=request.session.session_key)
+            try:
+                self.node.send_event(name="logout", sender="daarmaan",
+                                     ticket=request.session.session_key)
+            except Proxy.ConnectionRefused:
+                # TODO: log some messages here
+                pass
 
         if not next_url:
             next_url = request.META.get("HTTP_REFERER", None)

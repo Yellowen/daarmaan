@@ -67,7 +67,7 @@ def login_view(request):
                 return HttpResponseRedirect("/")
 
             return redirect(reverse(
-                "daarmaan.server.views.general.dashboard",
+                "dashboard-index",
                 args=[]))
         else:
             return rr("index.html", {"regform": form,
@@ -93,7 +93,7 @@ def index(request):
     Main page.
     """
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('dashboard'))
+        return HttpResponseRedirect(reverse('dashboard-index'))
 
     if request.method == "POST":
         if request.POST["form"] == "login":

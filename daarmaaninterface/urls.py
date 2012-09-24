@@ -28,9 +28,10 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-
-    url(r"^", include("daarmaan.server.urls")),
+    url(r"^my/", include("dashboard.urls_temp")),
     url(r'^admin/', include(admin.site.urls)),
+    url(r"^", include("daarmaan.server.urls")),
+
 )
 
 urlpatterns += patterns('',

@@ -29,19 +29,23 @@
 
 <body>
   <header>
+    {% block header %}
     <div class="inner-box">
 
       <div id="nav">
 	<nav>
+	  {% block nav %}
 	  <ul>
 	    <li><a href="/page/about/">{% trans "What is Daarmaan?" %}</a></li>
 	    <li><a href="/forget/password/">{% trans "I forgot my password" %}</a></li>
 	    
 	  </ul>
+	  {% endblock %}
 	</nav>
       </div>
 
     </div>
+    {% endblock header %}
   </header>
 
   {% block header-home %}
