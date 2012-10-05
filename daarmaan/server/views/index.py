@@ -126,11 +126,36 @@ class IndexPage(object):
         """
         Handle the registeration request.
         """
+        from django.contrib.auth.models import User
+        from django.db import IntegrityError
+
         form = PreRegistrationForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data["email"]
             username = form.cleaned_data["username"]
-        return HttpResponse()
+
+            # Check for exists email
+            emails_count = User.objects.filter(email=email).count()
+            if emails_count:
+                failed = True
+                msg = _("This email has been registered before.")
+                klass = "error"
+            else:
+                try:
+                    user = User(username=username,
+                                email=email)
+                    user.save()
+                    msg = _("A verfication mail has been sent to your e-mail address.")
+                    klass = "info"
+                except IntegrityError:
+                    msg = _("User already exists.")
+                    klass = "error"
+
+        return rr(self.template,
+                  {"regform": form,
+                   "msgclass": klass,
+                   "msg": msg},
+                  context_instance=RequestContext(request))
 
     def _setup_session(self, request):
         """
