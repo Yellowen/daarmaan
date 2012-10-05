@@ -20,11 +20,12 @@
 from django.conf.urls import patterns, include, url
 
 from daarmaan.server.views.sso import daarmaan_service
+from daarmaan.server.views.index import index_page
 
 
 urlpatterns = patterns('',
 
-    url(r"^login/$", "daarmaan.server.views.general.login_view", name="login"),
+    #url(r"^login/$", "daarmaan.server.views.general.login_view", name="login"),
 
     url(r"^gstatics/$", "daarmaan.server.views.statics.serv_statics",
         name="statics-serv"),
@@ -32,7 +33,7 @@ urlpatterns = patterns('',
         "daarmaan.server.views.statics.ajax_widget_jsonp",
         name="ajax-widget-jsonp"),
 
-    url(r"^$", "daarmaan.server.views.general.index", name="home"),
+    url(r"^$", include(index_page.urls)),
 
     url(r'^', include(daarmaan_service.urls)),
 )

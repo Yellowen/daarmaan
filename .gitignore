@@ -1,3 +1,4 @@
+smtp_settings.py
 db
 page/
 *.pyc

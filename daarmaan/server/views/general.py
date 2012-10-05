@@ -85,6 +85,10 @@ def login_view(request):
 
 
 def pre_register(request):
+    form = PreRegistrationForm(request.POST)
+    if form.is_valid():
+        email = form.cleaned_data["email"]
+        username = form.cleaned_data["username"]
     return HttpResponse()
 
 

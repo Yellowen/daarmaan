@@ -187,7 +187,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     # Project information contexts
     "daarmaaninterface.projinfo.info",
-    "dashboard.context_processors.dashboard",
+    #"dashboard.context_processors.dashboard",
 
 )
 
@@ -209,3 +209,14 @@ VAKHSHOUR = {
     "host": "127.0.0.1",
     "port": "8888",
 }
+
+
+try:
+    import smtp_settings
+    EMAIL_HOST = smtp_settings.EMAIL_HOST
+    EMAIL_PORT = smtp_settings.EMAIL_PORT
+    EMAIL_HOST_USER = smtp_settings.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = smtp_settings.EMAIL_HOST_PASSWORD
+    EMAIL_USE_TLS = smtp_settings.EMAIL_USE_TLS
+except ImportError:
+    pass
