@@ -32,7 +32,7 @@ from django.conf.urls import patterns, url
 
 from daarmaan.server.views.sso import daarmaan_service
 from daarmaan.server.forms import PreRegistrationForm
-from daarmaan.server.models import Profile, Service
+from daarmaan.server.models import Profile, Service, VerificationCode
 
 
 class IndexPage(object):
@@ -50,6 +50,9 @@ class IndexPage(object):
             '',
             url(r"^$", self.index,
                 name="home"),
+            url(r"^verificate/$", self.verificate,
+                name="verificate"),
+
             )
         return urlpatterns
 
@@ -144,10 +147,18 @@ class IndexPage(object):
                 try:
                     user = User(username=username,
                                 email=email)
+                    user.active = False
                     user.save()
+
+                    verif_code = VerificationCode.generate(user)
+                    print ">>>>> ", verif_code
+                    verification_link = reverse('verificate', args=[])
+
+                    print ">>>>> ", verif_code, verification_link
                     msg = _("A verfication mail has been sent to your e-mail address.")
                     klass = "info"
                 except IntegrityError:
+                    # In case of exists username
                     msg = _("User already exists.")
                     klass = "error"
 
@@ -166,5 +177,7 @@ class IndexPage(object):
         services_id = [i.id for i in services]
         request.session["services"] = services_id
 
+    def verificate(self, request):
+        return HttpResponse()
 
 index_page = IndexPage()

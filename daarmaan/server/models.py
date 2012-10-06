@@ -20,7 +20,7 @@ import json
 
 from django.db import models
 from django.utils.translation import ugettext as _
-
+from django.conf import settings
 
 class Service(models.Model):
     """
@@ -85,3 +85,92 @@ class UserServices(models.Model):
 
     services = models.ManyToManyField(Service,
                                       verbose_name=_("service"))
+
+    def __unicode__(self):
+        return "%s services" % self.user
+
+    class Meta:
+        verbose_name = _("user services")
+        verbose_name_plural = _("user services")
+
+
+class VerificationCode (models.Model):
+    """
+    Verification code model. This model will contain all the
+    verification codes that will sent to users.
+    """
+    user = models.ForeignKey("auth.User",
+                             verbose_name=_("permissions"),
+                             unique=True)
+
+    code = models.CharField(_("code"), max_length=40)
+
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    # 48 houres
+    DEFAULT_VALID_TIME = 48
+
+    @classmethod
+    def cleanup(cls):
+        from datetime import timedelta, datetime
+
+        valid_time = getattr(settings, 'VALIDATION_TIME',
+                             cls.DEFAULT_VALID_TIME)
+
+        pasted_48 = datetime.now() - timedelta(hours=valid_time)
+
+        cls.objects.filter(timestamp__lt=pasted_48).delete()
+
+    @classmethod
+    def generate(cls, user):
+        """
+        Generate a verification code. At first look for exists
+        valid code.
+        """
+        try:
+            # Is there any exists verification code for given user?
+            code = cls.objects.get(user=user)
+
+            if code.is_valid():
+                # If code was valid
+                return code.code
+            else:
+                # If code is not valid we need to generate a new one
+                # so cleanup all the expired codes
+                cls.cleanup()
+
+        except cls.DoesNotExist:
+            pass
+
+        # We have to create a new verification code
+        import hashlib
+        from datetime import datetime
+
+        m = hashlib.sha1()
+        m.update("%s%s" % (user.username,
+                           datetime.now()))
+        code = cls(user=user, code=m.hexdigest())
+        code.save()
+        return code.code
+
+    def _valid_range(self):
+        """
+        Returns a valid range of time.
+        """
+        from datetime import timedelta, datetime
+
+        valid_time = getattr(settings, 'VALIDATION_TIME',
+                             self.DEFAULT_VALID_TIME)
+
+        return datetime.now() - timedelta(hours=valid_time)
+
+    def is_valid(self):
+        """
+        Does verification code belongs to a valid time range.
+        """
+        pasted_48 = self._valid_range()
+
+        if self.timestamp < pasted_48:
+            return False
+
+        return True
