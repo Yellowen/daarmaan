@@ -33,7 +33,7 @@ urlpatterns = patterns('',
         "daarmaan.server.views.statics.ajax_widget_jsonp",
         name="ajax-widget-jsonp"),
 
-    url(r"^$", include(index_page.urls)),
+    url(r"^", include(index_page.urls)),
 
     url(r'^', include(daarmaan_service.urls)),
 )

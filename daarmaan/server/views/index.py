@@ -50,7 +50,7 @@ class IndexPage(object):
             '',
             url(r"^$", self.index,
                 name="home"),
-            url(r"^verificate/$", self.verificate,
+            url(r"^verificate/([A-Fa-f0-9]{40})/$", self.verificate,
                 name="verificate"),
 
             )
@@ -151,12 +151,16 @@ class IndexPage(object):
                     user.save()
 
                     verif_code = VerificationCode.generate(user)
-                    print ">>>>> ", verif_code
-                    verification_link = reverse('verificate', args=[])
 
-                    print ">>>>> ", verif_code, verification_link
+                    verification_link = reverse("verificate",
+                                                args=[verif_code])
+
+                    self.send_verification_mail(user,
+                                                verification_link)
+
                     msg = _("A verfication mail has been sent to your e-mail address.")
                     klass = "info"
+                    form = PreRegistrationForm()
                 except IntegrityError:
                     # In case of exists username
                     msg = _("User already exists.")
@@ -177,7 +181,16 @@ class IndexPage(object):
         services_id = [i.id for i in services]
         request.session["services"] = services_id
 
-    def verificate(self, request):
+    def verificate(self, request, verification_code):
         return HttpResponse()
+
+    def send_verification_mail(self, user, verification_link):
+        from django.core.mail import send_mail
+        from django.conf import settings
+
+        msg = verification_link
+        send_mail('[Yellowen] Verification', msg, settings.EMAIL,
+                  [user.email], fail_silently=False)
+
 
 index_page = IndexPage()

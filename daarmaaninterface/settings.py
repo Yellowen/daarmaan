@@ -213,10 +213,13 @@ VAKHSHOUR = {
 
 try:
     import smtp_settings
+
     EMAIL_HOST = smtp_settings.EMAIL_HOST
     EMAIL_PORT = smtp_settings.EMAIL_PORT
     EMAIL_HOST_USER = smtp_settings.EMAIL_HOST_USER
     EMAIL_HOST_PASSWORD = smtp_settings.EMAIL_HOST_PASSWORD
     EMAIL_USE_TLS = smtp_settings.EMAIL_USE_TLS
+    EMAIL = smtp_settings.EMAIL
+
 except ImportError:
     pass
