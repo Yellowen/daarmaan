@@ -22,6 +22,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from django.conf import settings
 
+
 class Service(models.Model):
     """
     Service class represent a web application that use Daarmaan as its
@@ -33,7 +34,7 @@ class Service(models.Model):
                            max_length=256)
 
     active = models.BooleanField(_("active"),
-                                default=False)
+                                 default=False)
 
     user = models.ForeignKey('auth.User', verbose_name=_("User"))
 
@@ -51,7 +52,7 @@ class Profile(models.Model):
     """
 
     user = models.ForeignKey("auth.User",
-                                    verbose_name=_("permissions"))
+                             verbose_name=_("permissions"))
 
     service = models.ForeignKey(Service,
                                 verbose_name=_("service"))
@@ -170,6 +171,8 @@ class VerificationCode (models.Model):
         """
         pasted_48 = self._valid_range()
 
+        pasted_48.tzinfo = self.timestamp.tzinfo
+        print "<<<<< ", self.timestamp, pasted_48
         if self.timestamp < pasted_48:
             return False
 

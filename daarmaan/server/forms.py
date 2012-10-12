@@ -97,3 +97,20 @@ class PostRegistrationForm(forms.Form):
 
     class PasswordError(Exception):
         pass
+
+
+class NewUserForm (forms.Form):
+    """
+    This form will collect the basic user information
+    after email verification.
+    """
+
+    first_name = forms.CharField(label=_("first name"),
+                                 max_length=32, required=False)
+    last_name = forms.CharField(label=_("last name"),
+                                max_length=32, required=False)
+    password1 = forms.CharField(label=_("password"),
+                                max_length=32)
+    password2 = forms.CharField(label=_("repead password"),
+                                max_length=32)
+

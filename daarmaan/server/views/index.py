@@ -20,15 +20,14 @@
 import json
 
 from django.shortcuts import render_to_response as rr
-from django.shortcuts import redirect, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
-from django.http import (HttpResponse, HttpResponseRedirect,
-                         HttpResponseForbidden)
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.conf.urls import patterns, url
+from django.conf import settings
 
 from daarmaan.server.views.sso import daarmaan_service
 from daarmaan.server.forms import PreRegistrationForm
@@ -40,6 +39,7 @@ class IndexPage(object):
     Daarmaan index page class.
     """
     template = "index.html"
+    new_user_form_template = "new_user_form.html"
 
     @property
     def urls(self):
@@ -90,12 +90,17 @@ class IndexPage(object):
             return self.pre_register(request)
 
     def login(self, request):
+        """
+        Login view that only accept a POST request.
+        """
         username = request.POST['username']
         password = request.POST['password']
         remember = request.POST.get("remember_me", False)
         next_url = request.POST.get("next", None)
+
         form = PreRegistrationForm()
 
+        # Authenticate the user
         user = authenticate(username=username,
                             password=password)
         if user is not None:
@@ -134,31 +139,41 @@ class IndexPage(object):
 
         form = PreRegistrationForm(request.POST)
         if form.is_valid():
+            # In case of valid information from user.
             email = form.cleaned_data["email"]
             username = form.cleaned_data["username"]
 
-            # Check for exists email
+            # Check for email exists
             emails_count = User.objects.filter(email=email).count()
             if emails_count:
                 failed = True
                 msg = _("This email has been registered before.")
                 klass = "error"
+
             else:
                 try:
+                    # Create and save an inactive user
                     user = User(username=username,
                                 email=email)
                     user.active = False
                     user.save()
 
-                    verif_code = VerificationCode.generate(user)
+                    if settings.EMAIL_VERIFICATION:
+                        # Generate and send a verification code to user
+                        # only if EMAIL_VERIFICATION was set
+                        verif_code = VerificationCode.generate(user)
 
-                    verification_link = reverse("verificate",
-                                                args=[verif_code])
+                        verification_link = reverse("verificate",
+                                                    args=[verif_code])
 
-                    self.send_verification_mail(user,
-                                                verification_link)
+                        print ">>> ", verification_link
+                        #self.send_verification_mail(user,
+                        #                       verification_link)
 
-                    msg = _("A verfication mail has been sent to your e-mail address.")
+                        msg = _("A verfication mail has been sent to your e-mail address.")
+                    else:
+                        msg = _("You're request submited, thanks for your interest.")
+
                     klass = "info"
                     form = PreRegistrationForm()
                 except IntegrityError:
@@ -176,17 +191,44 @@ class IndexPage(object):
         """
         Insert all needed values into user session.
         """
+        # TODO: Do we need to set the user services to his session.
         return
         services = request.user.get_profile().services.all()
         services_id = [i.id for i in services]
         request.session["services"] = services_id
 
     def verificate(self, request, verification_code):
-        return HttpResponse()
+        """
+        This view is responsible for verify the user mail address
+        from the given verification code and redirect to the basic
+        information form view.
+        """
+
+        # Look up for given verification code in the VerificationCode
+        # model. And check for the validation of an any possible exists
+        # code
+        try:
+            verified_code = VerificationCode.objects.get(
+                code=verification_code)
+        except VerificationCode.DoesNotExist:
+            raise Http404()
+
+        # If the verified_code was valid (belongs to past 48 hours for
+        # example) the new user form will allow user to finalize his/her
+        # registeration process.
+        if verified_code.is_valid():
+            form = NewUserForm()
+            return rr(self.new_user_form_template,
+                      {"form": form},
+                      context_instance=RequestContext(request))
+        else:
+            raise Http404()
 
     def send_verification_mail(self, user, verification_link):
+        """
+        Send the verification link to the user.
+        """
         from django.core.mail import send_mail
-        from django.conf import settings
 
         msg = verification_link
         send_mail('[Yellowen] Verification', msg, settings.EMAIL,

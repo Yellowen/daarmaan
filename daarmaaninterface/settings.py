@@ -211,6 +211,7 @@ VAKHSHOUR = {
 }
 
 
+EMAIL_VERIFICATION = True
 try:
     import smtp_settings
 
