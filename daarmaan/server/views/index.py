@@ -17,21 +17,18 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
 
-import json
-
 from django.shortcuts import render_to_response as rr
+from django.shortcuts import redirect
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, Http404
 from django.conf.urls import patterns, url
 from django.conf import settings
 
-from daarmaan.server.views.sso import daarmaan_service
-from daarmaan.server.forms import PreRegistrationForm
-from daarmaan.server.models import Profile, Service, VerificationCode
+from daarmaan.server.forms import PreRegistrationForm, NewUserForm
+from daarmaan.server.models import VerificationCode
 
 
 class IndexPage(object):
@@ -52,6 +49,8 @@ class IndexPage(object):
                 name="home"),
             url(r"^verificate/([A-Fa-f0-9]{40})/$", self.verificate,
                 name="verificate"),
+            url(r"^registration/done/$", self.registration_done,
+                name="registration-done"),
 
             )
         return urlpatterns
@@ -167,8 +166,8 @@ class IndexPage(object):
                                                     args=[verif_code])
 
                         print ">>> ", verification_link
-                        #self.send_verification_mail(user,
-                        #                       verification_link)
+                        self.send_verification_mail(user,
+                                               verification_link)
 
                         msg = _("A verfication mail has been sent to your e-mail address.")
                     else:
@@ -217,9 +216,13 @@ class IndexPage(object):
         # example) the new user form will allow user to finalize his/her
         # registeration process.
         if verified_code.is_valid():
-            form = NewUserForm()
+            form = NewUserForm(initial={
+                "verification_code": verified_code.code})
+
+            form.action = reverse("registration-done", args=[])
             return rr(self.new_user_form_template,
-                      {"form": form},
+                      {"form": form,
+                       "user": verified_code.user},
                       context_instance=RequestContext(request))
         else:
             raise Http404()
@@ -233,6 +236,69 @@ class IndexPage(object):
         msg = verification_link
         send_mail('[Yellowen] Verification', msg, settings.EMAIL,
                   [user.email], fail_silently=False)
+
+    def registration_done(self, request):
+        if request.method == "POST":
+            form = NewUserForm(request.POST)
+            try:
+                verified_code = VerificationCode.objects.get(
+                    code=request.POST.get("verification_code", ""))
+
+            except VerificationCode.DoesNotExist:
+                return HttpResponseForbidden()
+
+            if form.is_valid():
+                pass1 = form.cleaned_data["password1"]
+                pass2 = form.cleaned_data["password2"]
+                fname = form.cleaned_data["first_name"]
+                lname = form.cleaned_data["last_name"]
+
+                if pass1 != pass2:
+                    form._errors = {
+                        "password1": _("Two password fields did not match."),
+                        "password2": _("Two password fields did not match.")}
+                    msg = _("Two password fields did not match.")
+                    klass = "error"
+                elif len(pass1) < 6:
+                    form._errors = {
+                        "password1": _("Password should be more than 6 character long.")}
+                    msg = _("Password should be more than 6 character long.")
+                    klass = "error"
+                elif len(pass1) > 40:
+                    form._errors = {
+                        "password1": _("Password should be less than 40 character long.")}
+                    msg = _("Password should be less than 40 character long.")
+                    klass = "error"
+                else:
+                    user = verified_code.user
+                    user.set_password(pass1)
+                    user.first_name = fname
+                    user.last_name = lname
+                    user.active = True
+                    user.save()
+
+                    # Clean up all the expired codes and currently used one
+                    verified_code.delete()
+                    VerificationCode.cleanup()
+
+                    # Login the user
+                    user = authenticate(username=user.username,
+                                        password=pass1)
+
+                    login(request, user)
+
+                    return redirect(reverse(
+                        "dashboard-index",
+                        args=[]))
+
+            return rr(self.new_user_form_template,
+                      {"form": form,
+                       "user": verified_code.user,
+                       "msg": msg,
+                       "klass": klass},
+                      context_instance=RequestContext(request))
+        else:
+            raise Http404()
 
 
 index_page = IndexPage()

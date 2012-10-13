@@ -110,7 +110,10 @@ class NewUserForm (forms.Form):
     last_name = forms.CharField(label=_("last name"),
                                 max_length=32, required=False)
     password1 = forms.CharField(label=_("password"),
-                                max_length=32)
+                                max_length=32,
+                                widget=forms.PasswordInput())
     password2 = forms.CharField(label=_("repead password"),
-                                max_length=32)
-
+                                max_length=32,
+                                widget=forms.PasswordInput())
+    verification_code = forms.CharField(widget=forms.HiddenInput(),
+                                        max_length=40)

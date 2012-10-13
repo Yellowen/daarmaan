@@ -1,9 +1,43 @@
 {% extends 'base.html'%}
+{% load i18n %}
+
 {% comment %}
 This Template is responsible for rendering the NewUserForm form and collect the
 basic information about user after the email verification process.
 {% endcomment %}
 
 {% block content %}
-<h1>HELLO</h1>
+<section id="content">
+  <div class="box w600 center">
+    <h2>{% trans "Basic user information" %}</h2>
+    <p>{% trans "In order to complete the registration process please fill the requested fields." %}
+
+      <form action="{{ form.action }}" method="POST">{% csrf_token %}
+	{% if msg %}
+	<p class="{% if klass %}{{ klass }}{% else %}info{% endif %}">{{ msg }}</p>
+	{% endif %}
+      <table class="formtable">
+	<tr>
+	  <td><label for="username_span">{% trans "Username" %}:</label></td><td><span class="disable" id="username_span">{{ user.username }}</span></td>
+	</tr>
+	<tr>
+	  <td><label for="email_span">{% trans "Email" %}:</label></td><td><span class="disable" id="email_span">{{ user.email }}</span></td>
+	</tr>
+	{% for field in form %}
+	{% if not field.is_hidden %}
+	<tr>
+	  <td><label>{{ field.label_tag }}:</label></td><td{% if field.erros %}class="notvalidfield"{% endif %}>{{ field }}</td>{% if field.erros %}<td class="error normal">asdasd{{ field.errors }}</td>{% endif %}
+	</tr>
+	{% else %}
+	{{ field }}
+	{% endif %}
+	{% endfor %}
+
+	<tr><td></td><td align="center"><input class="button" type="submit" value="{% trans "Finish" %}"></td></tr>
+	</table>
+      </form>
+
+  </div>
+</section>
+{{ form.media }}
 {% endblock content %}

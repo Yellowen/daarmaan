@@ -106,4 +106,16 @@ footer a {
     clear: both;
     width: 100%;
 }
+.center {
+    margin: 0 auto;
+}
 
+.w400 {
+    width: 400px;
+}
+.w500 {
+    width: 500px;
+}
+.w600 {
+    width: 600px;
+}

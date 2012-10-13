@@ -104,7 +104,7 @@ class VerificationCode (models.Model):
                              verbose_name=_("permissions"),
                              unique=True)
 
-    code = models.CharField(_("code"), max_length=40)
+    code = models.CharField(_("code"), max_length=40, unique=True)
 
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -171,9 +171,8 @@ class VerificationCode (models.Model):
         """
         pasted_48 = self._valid_range()
 
-        pasted_48.tzinfo = self.timestamp.tzinfo
-        print "<<<<< ", self.timestamp, pasted_48
-        if self.timestamp < pasted_48:
+        timestamp = self.timestamp.replace(tzinfo=None)
+        if timestamp < pasted_48:
             return False
 
         return True
