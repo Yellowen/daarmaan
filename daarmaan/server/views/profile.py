@@ -18,6 +18,11 @@
 # -----------------------------------------------------------------------------
 
 from django.conf.urls import patterns, url
+from django.template import RequestContext
+from django.shortcuts import render_to_response as rr
+from django.http import HttpResponseRedirect, Http404
+
+from daarmaan.server.models import BasicProfile
 
 
 class ProfileActions(object):
@@ -50,9 +55,26 @@ class ProfileActions(object):
         Index view.
         """
         if not request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('dashboard-index'))
+            return HttpResponseRedirect('/')
 
         if request.method == "POST":
-            return self.on_post(request)
+            raise Http404()
         else:
-            return self.on_get(request)
+            try:
+                profile = BasicProfile.objects.get(
+                    user=request.user)
+
+            except BasicProfile.DoesNotExist:
+                profile = BasicProfile(user=request.user)
+                profile.save()
+
+            return rr(self.view_profile_template,
+                      {"user": request.user,
+                       "profile": profile},
+                      context_instance=RequestContext(request))
+
+    def edit(self, request):
+        return HttpResponseRedirect('/')
+
+
+profile = ProfileActions()

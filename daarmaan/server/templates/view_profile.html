@@ -1,0 +1,33 @@
+{% extends 'dashboard/base.html'%}
+{% load i18n %}
+
+{% comment %}
+View the user basic  profile information.
+{% endcomment %}
+
+{% block content %}
+<section id="content">
+  <div class="box w600 center">
+    <h2>{% trans "Basic user information" %}</h2>
+    <table class="formtable">
+      <tr>
+	<td>{% trans "First name" %}:</td><td>{{ user.first_name }}</td>
+      </tr>
+      <tr>
+	<td>{% trans "Last name" %}:</td><td>{{ user.last_name }}</td>
+      </tr>
+      <tr>
+	<td>{% trans "Username" %}:</td><td>{{ user.username }}</td>
+      </tr>
+      <tr>
+
+	<td>{% trans "Email" %}:</td><td>{{ user.email }}</td>
+      </tr>
+      <tr>
+	<td>{% trans "Date joined" %}:</td><td>{{ user.date_joined }}</td>
+      </tr>
+      </table>
+  </div>
+</section>
+{{ form.media }}
+{% endblock content %}

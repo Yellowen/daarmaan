@@ -176,3 +176,19 @@ class VerificationCode (models.Model):
             return False
 
         return True
+
+
+class BasicProfile(models.Model):
+    user = models.ForeignKey("auth.User",
+                             verbose_name=_("permissions"),
+                             unique=True)
+
+    public = models.BooleanField(_("public profile"),
+                                 default=False)
+
+    def __unicode__(self):
+        return "%s basic profile" % self.user
+
+    class Meta:
+        verbose_name = _("user services")
+        verbose_name_plural = _("user services")

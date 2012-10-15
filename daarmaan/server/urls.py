@@ -21,7 +21,7 @@ from django.conf.urls import patterns, include, url
 
 from daarmaan.server.views.sso import daarmaan_service
 from daarmaan.server.views.index import index_page
-
+from daarmaan.server.views.profile import profile
 
 urlpatterns = patterns('',
 
@@ -32,6 +32,8 @@ urlpatterns = patterns('',
     url(r"^jsonp/validate/$",
         "daarmaan.server.views.statics.ajax_widget_jsonp",
         name="ajax-widget-jsonp"),
+
+    url(r"^me/$", include(profile.urls)),
 
     url(r"^", include(index_page.urls)),
 
