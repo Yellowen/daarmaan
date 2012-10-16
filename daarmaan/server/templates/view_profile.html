@@ -1,4 +1,7 @@
-{% extends 'dashboard/base.html'%}
+
+{% extends global|yesno:'base.html,dashboard/base.html'%}
+
+
 {% load i18n %}
 
 {% comment %}

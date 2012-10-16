@@ -21,6 +21,7 @@ from django.conf.urls import patterns, url
 from django.template import RequestContext
 from django.shortcuts import render_to_response as rr
 from django.http import HttpResponseRedirect, Http404
+from django.contrib.auth.models import User
 
 from daarmaan.server.models import BasicProfile
 
@@ -60,21 +61,40 @@ class ProfileActions(object):
         if request.method == "POST":
             raise Http404()
         else:
-            try:
-                profile = BasicProfile.objects.get(
-                    user=request.user)
-
-            except BasicProfile.DoesNotExist:
-                profile = BasicProfile(user=request.user)
-                profile.save()
-
+            profile = self._get_user_profile(request.user)
             return rr(self.view_profile_template,
                       {"user": request.user,
-                       "profile": profile},
+                       "profile": profile,
+                       "global": False},
                       context_instance=RequestContext(request))
 
     def edit(self, request):
         return HttpResponseRedirect('/')
+
+    def view_profile(self, request, username):
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404()
+
+        profile = self._get_user_profile(request.user)
+
+        return rr(self.view_profile_template,
+                  {"user": request.user,
+                   "profile": profile,
+                   "global": True},
+                  context_instance=RequestContext(request))
+
+    def _get_user_profile(self, user):
+        """
+        Get or create a basic profile object for given user.
+        """
+        try:
+            p = BasicProfile.objects.get(user=user)
+        except BasicProfile.DoesNotExist:
+            p = BasicProfile(user=user)
+            p.save()
+        return p
 
 
 profile = ProfileActions()
