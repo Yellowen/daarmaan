@@ -17,6 +17,7 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
 
+from django.core.urlresolvers import reverse
 from django.conf.urls import patterns, url
 from django.template import RequestContext
 from django.shortcuts import render_to_response as rr
@@ -69,7 +70,24 @@ class ProfileActions(object):
                       context_instance=RequestContext(request))
 
     def edit(self, request):
-        return HttpResponseRedirect('/')
+        """
+        Edit view for basic user profile.
+        """
+        from daarmaan.server.forms import EditBasicProfile
+
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/?next=%s' % reverse(self.edit,
+                                                              args=[]))
+        user = request.user
+        profile = self._get_user_profile(user)
+
+        if request.method == "POST":
+            pass
+        else:
+            form = EditBasicProfile(user, profile)
+            return rr(self.edit_profile_template,
+                      {"form": form},
+                      context_instance=RequestContext(request))
 
     def view_profile(self, request, username):
         try:

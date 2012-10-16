@@ -22,6 +22,8 @@ from django import forms
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 
+from daarmaan.server.models import BasicProfile
+
 
 class AjaxWidget(forms.TextInput):
     """
@@ -117,3 +119,42 @@ class NewUserForm (forms.Form):
                                 widget=forms.PasswordInput())
     verification_code = forms.CharField(widget=forms.HiddenInput(),
                                         max_length=40)
+
+
+class EditBasicProfile(forms.ModelForm):
+    """
+    Form for editing the basic information of user.
+    """
+    username = forms.CharField(label=_("user name"))
+    first_name = forms.CharField(label=_("First name"),
+                                 max_length=30,
+                                 required=False)
+    last_name = forms.CharField(label=_("last name"),
+                                max_length=30,
+                                required=False)
+
+    email = forms.EmailField(label=_("email"))
+
+    def __init__(self, user=None, profile=None, *args, **kwargs):
+        if user and profile:
+            self.user = user
+            self.profile = profile
+
+            # TODO: Add the profile data to initial dict too
+            data = {"username": user.username,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "email": user.email}
+
+            super(EditBasicProfile, self).__init__(initial=data, *args,
+                                                   **kwargs)
+        else:
+            super(EditBasicProfile, self).__init__(*args,
+                                                   **kwargs)
+
+        self.fields['username'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['readonly'] = True
+
+    class Meta:
+        model = BasicProfile
+        exclude = ["user", ]

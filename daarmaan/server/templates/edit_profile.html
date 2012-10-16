@@ -1,0 +1,37 @@
+{% extends "dashboard/base.html" %}
+{% load i18n %}
+
+{% comment %}
+This Template is responsible for rendering the EditBasicProfile and collect the
+basic information about user and change the exists data.
+{% endcomment %}
+
+{% block content %}
+<section id="content">
+  <div class="box w600 center">
+    <h2>{% trans "Edit Profile" %}</h2>
+
+      <form action="{{ form.action }}" method="POST">{% csrf_token %}
+	{% if msg %}
+	<p class="{% if klass %}{{ klass }}{% else %}info{% endif %}">{{ msg }}</p>
+	{% endif %}
+      <table class="formtable">
+	{% for field in form %}
+	{% if not field.is_hidden %}
+	<tr>
+	  <td><label>{{ field.label_tag }}:</label></td><td{% if field.erros %}class="notvalidfield"{% endif %}>{{ field }}</td>{% if field.erros %}<td class="error normal">asdasd{{ field.errors }}</td>{% endif %}
+	</tr>
+	{% else %}
+	{{ field }}
+	{% endif %}
+	{% endfor %}
+
+	<tr><td></td><td align="center"><input class="button" type="submit" value="{% trans "save" %}"></td></tr>
+	</table>
+      </form>
+
+  </div>
+</section>
+{{ form.media }}
+
+{% endblock content %}
