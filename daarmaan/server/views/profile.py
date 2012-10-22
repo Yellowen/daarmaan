@@ -109,6 +109,7 @@ class ProfileActions(object):
         """
         try:
             p = BasicProfile.objects.get(user=user)
+
         except BasicProfile.DoesNotExist:
             p = BasicProfile(user=user)
             p.save()

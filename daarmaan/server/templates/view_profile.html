@@ -30,6 +30,7 @@ View the user basic  profile information.
 	<td>{% trans "Date joined" %}:</td><td>{{ user.date_joined }}</td>
       </tr>
       </table>
+    <p aligh="right"><a href="{% url edit-profile %}" class="bluebutton">{% trans 'Edit' %}</a></p>
   </div>
 </section>
 {{ form.media }}

@@ -28,7 +28,7 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-    url(r"^my/", include("dashboard.urls_temp")),
+    url(r"^my/", include("vanda.apps.dashboard.urls_temp")),
     url(r'^admin/', include(admin.site.urls)),
     url(r"^", include("daarmaan.server.urls")),
 
