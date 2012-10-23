@@ -186,6 +186,9 @@ class BasicProfile(models.Model):
     public = models.BooleanField(_("public profile"),
                                  default=False)
 
+    def is_public(self):
+        return self.public
+
     def __unicode__(self):
         return "%s basic profile" % self.user
 

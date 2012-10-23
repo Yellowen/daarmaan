@@ -28,18 +28,20 @@ input:focus, select:focus, textarea:focus {
     -webkit-transition: box-shadow 100ms linear 0ms;
     -moz-transition: box-shadow 100ms linear 0ms;
 }
-.button { 
+.button, button { 
     border-radius: 3px;
     min-width: 50px;
-    height: 30px;
-    margin: 0;
-    padding: 4px 5px; 
+    min-height: 30px;
+    margin: 5px;
+    padding: 10px 15px; 
     color: #1a1a1a;
     text-transform:capitalize;
     Background: #fff;
     border: 1px solid #e8e8e8;
+    font-size: 16px;
+
 }
-.button:hover { 
+.button:hover, button:hover { 
     box-shadow: 0 0 6px #e5e5e5;
     Background: #f7f7f7;
     cursor: pointer;

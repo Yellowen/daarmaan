@@ -16,10 +16,17 @@ basic information about user and change the exists data.
 	<p class="{% if klass %}{{ klass }}{% else %}info{% endif %}">{{ msg }}</p>
 	{% endif %}
       <table class="formtable">
+	<tr>
+	  <td><label>{% trans "username" %}:</label></td><td>{{ user.username}}</td>
+	</tr>
+	<tr>
+	  <td><label>{% trans "email" %}:</label></td><td>{{ user.email}}</td>
+	</tr>
+
 	{% for field in form %}
 	{% if not field.is_hidden %}
 	<tr>
-	  <td><label>{{ field.label_tag }}:</label></td><td{% if field.erros %}class="notvalidfield"{% endif %}>{{ field }}</td>{% if field.erros %}<td class="error normal">asdasd{{ field.errors }}</td>{% endif %}
+	  <td>{{ field.label_tag }}:</td><td{% if field.erros %}class="notvalidfield"{% endif %}>{{ field }}</td>{% if field.erros %}<td class="error normal">asdasd{{ field.errors }}</td>{% endif %}
 	</tr>
 	{% else %}
 	{{ field }}

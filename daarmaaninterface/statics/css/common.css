@@ -120,19 +120,3 @@ footer a {
     width: 600px;
 }
 
-.bluebutton {
-    Background: #0191C8;
-    padding: 10px 20px;
-    font-weight: 700;
-    font-size: 18px;
-    border-radius: 5px;
-    color: white;
-    margin: 10px auto;
-
-}
-
-.bluebutton:hover {
-    Background: #005B9A;
-    -moz-transition: Background 300ms linear 0ms;
-    -webkit-transition: Background 300ms linear 0ms;
-}

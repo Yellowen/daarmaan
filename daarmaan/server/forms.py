@@ -125,7 +125,6 @@ class EditBasicProfile(forms.ModelForm):
     """
     Form for editing the basic information of user.
     """
-    username = forms.CharField(label=_("user name"))
     first_name = forms.CharField(label=_("First name"),
                                  max_length=30,
                                  required=False)
@@ -133,18 +132,13 @@ class EditBasicProfile(forms.ModelForm):
                                 max_length=30,
                                 required=False)
 
-    email = forms.EmailField(label=_("email"))
+    def __init__(self, user=None, *args, **kwargs):
 
-    def __init__(self, user=None, profile=None, *args, **kwargs):
-        if user and profile:
-            self.user = user
-            self.profile = profile
+        if user:
 
             # TODO: Add the profile data to initial dict too
-            data = {"username": user.username,
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "email": user.email}
+            data = {"first_name": user.first_name,
+                    "last_name": user.last_name}
 
             super(EditBasicProfile, self).__init__(initial=data, *args,
                                                    **kwargs)
@@ -152,8 +146,12 @@ class EditBasicProfile(forms.ModelForm):
             super(EditBasicProfile, self).__init__(*args,
                                                    **kwargs)
 
-        self.fields['username'].widget.attrs['readonly'] = True
-        self.fields['email'].widget.attrs['readonly'] = True
+    def save(self, *args, **kwargs):
+        obj = super(EditBasicProfile, self).save(commit=False)
+        obj.user.first_name = self.cleaned_data["first_name"]
+        obj.user.last_name = self.cleaned_data["last_name"]
+        obj.user.save()
+        obj.save()
 
     class Meta:
         model = BasicProfile

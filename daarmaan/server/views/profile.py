@@ -82,12 +82,18 @@ class ProfileActions(object):
         profile = self._get_user_profile(user)
 
         if request.method == "POST":
-            pass
+            form = EditBasicProfile(user, instance=profile, data=request.POST)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse("profile-home",
+                                                    args=[]))
         else:
-            form = EditBasicProfile(user, profile)
-            return rr(self.edit_profile_template,
-                      {"form": form},
-                      context_instance=RequestContext(request))
+            form = EditBasicProfile(user, instance=profile)
+
+        return rr(self.edit_profile_template,
+                  {"form": form,
+                   "user": user},
+                  context_instance=RequestContext(request))
 
     def view_profile(self, request, username):
         try:
@@ -96,6 +102,10 @@ class ProfileActions(object):
             raise Http404()
 
         profile = self._get_user_profile(request.user)
+        if not profile.is_public() and user != request.user:
+            # TODO: Show a suitable page to user in case of
+            # private profile
+            raise Http404()
 
         return rr(self.view_profile_template,
                   {"user": request.user,
