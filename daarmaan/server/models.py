@@ -29,9 +29,15 @@ class Service(models.Model):
     authentication service.
     """
     name = models.CharField(_("service"),
-                            max_length=64)
+                            max_length=64,
+                            unique=True)
+
     key = models.CharField(_("key"),
                            max_length=256)
+
+    default_url = models.URLField(_("Default URL"),
+                                  blank=True,
+                                  null=True)
 
     active = models.BooleanField(_("active"),
                                  default=False)

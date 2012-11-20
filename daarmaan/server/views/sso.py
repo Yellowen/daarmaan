@@ -20,7 +20,7 @@
 import json
 import urllib
 import hashlib
-from urlparse import urlparse
+from urlparse import urlparse, urlunparse, parse_qsl, ParseResult
 
 from django.conf.urls import patterns, include, url
 from django.contrib.sessions.models import Session
@@ -73,8 +73,15 @@ class DaarmaanServer(object):
             return HttpResponseForbidden("Invalid service")
 
         validator = DefaultValidation(service.key)
+        try:
+            next_url = urlparse(urllib.unquote(next_url).decode("utf8"))
+        except AttributeError, e:
+            if "HTTP_REFERER" in request.META:
+                next_url = urlparse(request.META["REFERER"])
+            else:
+                next_url = urlparse(service.default_url)
 
-        next_url = urlparse(urllib.unquote(next_url).decode("utf8"))
+        params = dict(parse_qsl(next_url[4]))
 
         # Does user authenticated before?
         if request.user.is_authenticated():
@@ -83,16 +90,22 @@ class DaarmaanServer(object):
             # (user session ID) will send back to service
             ticket = request.session.session_key
 
-            params = {'ticket': ticket,
-                      "hash": validator.sign(ticket)}
+            params.update({'ticket': ticket,
+                      "hash": validator.sign(ticket)})
 
-            next_url = "%s?%s" % (next_url.geturl(), urllib.urlencode(params))
 
         else:
             # If user is not authenticated simple ack answer will return
-            params = {"ack": ""}
-            next_url = "%s?%s" % (next_url.geturl(), urllib.urlencode(params))
+            params.update({"ack": ""})
 
+        next_url = ParseResult(next_url[0],
+                               next_url[1],
+                               next_url[2],
+                               next_url[3],
+                               urllib.urlencode(params),
+                               next_url[5])
+
+        next_url = next_url.geturl()
         return HttpResponseRedirect(next_url)
 
     def verify(self, request):
