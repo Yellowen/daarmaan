@@ -21,7 +21,7 @@
 from distutils.core import setup
 
 setup(name='Daarmaan',
-      version='0.2.1',
+      version='0.2.2',
       description='Single Sign On Service for Yellowen',
       author='Sameer Rahmani',
       author_email='lxsameer@gnu.org',
