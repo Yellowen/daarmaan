@@ -80,3 +80,7 @@ label {
 .disable {
     color: #aaaaaa;
 }
+
+form input {
+    margin: 0 0 0 10px;
+}

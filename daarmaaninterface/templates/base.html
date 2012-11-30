@@ -39,7 +39,7 @@
 	  {% block nav %}
 	  <ul>
 	    <li><a href="/page/about/">{% trans "What is Daarmaan?" %}</a></li>
-	    <li><a href="/forget/password/">{% trans "I forgot my password" %}</a></li>
+	    <li><a href="{% url password_reset %}">{% trans "I forgot my password" %}</a></li>
 	    
 	  </ul>
 	  {% endblock %}

@@ -26,7 +26,7 @@ basic information about user and change the exists data.
 	{% for field in form %}
 	{% if not field.is_hidden %}
 	<tr>
-	  <td>{{ field.label_tag }}:</td><td{% if field.erros %}class="notvalidfield"{% endif %}>{{ field }}</td>{% if field.erros %}<td class="error normal">asdasd{{ field.errors }}</td>{% endif %}
+	  <td>{{ field.label_tag }}:</td><td{% if field.errors %}class="notvalidfield"{% endif %}>{{ field }}</td>{% if field.errors %}<td class="error normal">{{ field.errors }}</td>{% endif %}
 	</tr>
 	{% else %}
 	{{ field }}
