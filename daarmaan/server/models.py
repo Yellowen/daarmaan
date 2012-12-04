@@ -47,6 +47,16 @@ class Service(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_access(self, user):
+        """
+        Check the user access to the current service.
+        """
+        user_services = UserServices.objects.filter(user=user)
+        if user_services and self in user_services:
+            return True
+
+        return False
+
     class Meta:
         verbose_name = _("service")
         verbose_name_plural = _("Services")

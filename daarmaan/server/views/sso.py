@@ -50,13 +50,13 @@ class DaarmaanServer(object):
         Url dispatcher property.
         """
         urlpatterns = patterns('',
-                url(r'^authenticate/$', self.authenticate,
-                    name="remote-auth"),
-                url(r'^verification/$', self.verify,
-                    name="remote-auth"),
-                url(r"^logout/$", self.logout,
-                    name="logout"),
-                )
+                               url(r'^authenticate/$', self.authenticate,
+                                   name="remote-auth"),
+                               url(r'^verification/$', self.verify,
+                                   name="remote-auth"),
+                               url(r"^logout/$", self.logout,
+                                   name="logout"),
+                               )
         return urlpatterns
 
     def authenticate(self, request):
@@ -75,7 +75,7 @@ class DaarmaanServer(object):
         validator = DefaultValidation(service.key)
         try:
             next_url = urlparse(urllib.unquote(next_url).decode("utf8"))
-        except AttributeError, e:
+        except AttributeError:
             if "HTTP_REFERER" in request.META:
                 next_url = urlparse(request.META["REFERER"])
             else:
@@ -91,8 +91,7 @@ class DaarmaanServer(object):
             ticket = request.session.session_key
 
             params.update({'ticket': ticket,
-                      "hash": validator.sign(ticket)})
-
+                           "hash": validator.sign(ticket)})
 
         else:
             # If user is not authenticated simple ack answer will return
@@ -121,7 +120,6 @@ class DaarmaanServer(object):
             return HttpResponseForbidden()
 
         validator = DefaultValidation(service.key)
-
 
         if not validator.is_valid(token, hash_):
             return HttpResponseForbidden()
