@@ -138,7 +138,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'daarmaan.server',
-    'dashboard',
+    'vanda.apps.dashboard',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -187,7 +187,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     # Project information contexts
     "daarmaaninterface.projinfo.info",
-    #"dashboard.context_processors.dashboard",
+    "vanda.apps.dashboard.context_processors.dashboard",
 
 )
 

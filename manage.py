@@ -2,6 +2,12 @@
 import os
 import sys
 
+try:
+    import dev_script
+except ImportError:
+    pass
+
+
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE",
                           "daarmaaninterface.settings")

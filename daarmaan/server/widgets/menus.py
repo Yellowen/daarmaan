@@ -17,28 +17,18 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
 
-import os
-
-from django.conf.urls import patterns, include, url
-from django.conf import settings
-from django.contrib import admin
-
+from django.utils.translation import ugettext as _
+from vanda.apps.dashbord.widgets.nav import NavigationMenu
 from vanda.apps.dashboard.base import dashboard
 
 
-admin.autodiscover()
-dashboard.auto_discovery()
+class TopMenu (NavigationMenu):
+    name = "top_menu"
+    title = "Navigation"
+
+    navigation_dict = {_("Edit profile"): "/asdfad/",
+                       _("Logout"): "/logout/"}
 
 
-urlpatterns = patterns('',
-                       url(r"^my/", include(dashboard.urls)),
-                       url(r'^admin/', include(admin.site.urls)),
-                       url(r"^", include("daarmaan.server.urls")),
-
-)
-
-urlpatterns += patterns('',
-        (r'^statics/(?P<path>.*)$', 'django.views.static.serve',
-         {'document_root': os.path.join(os.path.dirname(__file__),\
-                                        'statics').replace('\\', '/')}),
-)
+print ">>>> ", TopMenu.to_json()
+dashboard.register(TopMenu)
