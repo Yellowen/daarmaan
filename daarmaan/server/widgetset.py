@@ -26,8 +26,8 @@ class TopMenu (NavigationMenu):
     name = "top_menu"
     title = "Navigation"
 
-    navigation_dict = {_("Edit profile"): "/asdfad/",
-                       _("Logout"): "/logout/"}
+    navigation_dict = {_("Edit profile"): "/me/",
+                       _("Logout"): "/logout/?next=/"}
 
 
 print ">>>> ", TopMenu().to_json()
