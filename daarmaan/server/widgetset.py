@@ -18,7 +18,7 @@
 # -----------------------------------------------------------------------------
 
 from django.utils.translation import ugettext as _
-from vanda.apps.dashbord.widgets.nav import NavigationMenu
+from vanda.apps.dashboard.widgets.nav import NavigationMenu
 from vanda.apps.dashboard.base import dashboard
 
 
@@ -30,5 +30,7 @@ class TopMenu (NavigationMenu):
                        _("Logout"): "/logout/"}
 
 
-print ">>>> ", TopMenu.to_json()
-dashboard.register(TopMenu)
+print ">>>> ", TopMenu().to_json()
+dashboard.register(TopMenu())
+dashboard.add_widget_to('header', TopMenu())
+print  "<<<<<<<<<<<< ", dashboard.save_config()
