@@ -1,0 +1,18 @@
+* {padding: 0; margin: 0;}
+html {
+    Background: #1f1f1f;
+    height: 100%;
+    width: 100%;
+    font-family: "myriad-pro";
+    font-size: 12px;
+
+}
+
+a {
+    color: #eeeeec;
+
+}
+a:active {
+    color: #ffa500;
+}
+a:visited {color: #eeeeec;}

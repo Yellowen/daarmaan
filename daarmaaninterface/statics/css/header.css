@@ -1,0 +1,17 @@
+#id_header {
+    Background: black;
+    width: 100%;
+    font-weight: 700;
+    height: 30px;
+}
+
+#id_header ul {
+    list-style: none;
+    padding-top: 5px;
+}
+
+#id_header ul li {
+    padding: 10px 10px;
+    display: inline;
+    position: relative;
+}

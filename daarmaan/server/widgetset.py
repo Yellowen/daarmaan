@@ -29,6 +29,8 @@ class TopMenu (NavigationMenu):
     navigation_dict = {_("Edit profile"): "/me/",
                        _("Logout"): "/logout/?next=/"}
 
+    css = "css/topmenu.css"
+
 
 print ">>>> ", TopMenu().to_json()
 dashboard.register(TopMenu())

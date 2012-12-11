@@ -192,7 +192,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 # Daarmaan Version.
-VERSION = "0.2.1"
+VERSION = "0.5.31"
 
 # Session will not expired with browser close
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
@@ -225,3 +225,21 @@ try:
 
 except ImportError:
     pass
+
+
+DASHBOARD_CONFIG = {
+    "blocks": {"header": {"title": "header",
+                          "class": "HorizontalBar",
+                          "css": "css/header.css"},
+               "body": {"title": "Dashboard",
+                        "class": "WidgetArea",
+                        "css": ["css/widgetarea.css",
+                                "css/masonry.css"],
+                        "js": "js/masonry.js"},
+               "footer": {"title": "footer",
+                          "class": "HorizontalBar",
+                          "css": "css/footer.css"},
+               },
+    "css": ["css/dashboard.css",
+            "css/fonts.css"],
+}
