@@ -18,21 +18,51 @@
 # -----------------------------------------------------------------------------
 
 from django.utils.translation import ugettext as _
-from vanda.apps.dashboard.widgets.nav import NavigationMenu
+from vanda.apps.dashboard.widgets.button import Button
 from vanda.apps.dashboard.base import dashboard
 
 
-class TopMenu (NavigationMenu):
-    name = "top_menu"
-    title = "Navigation"
+class UserButton (Button):
+    title = _("User Menu")
+    name = "user_button"
+    image = True
+    gravatar = True
+    weight = 1000
 
-    navigation_dict = {_("Edit profile"): "/me/",
-                       _("Logout"): "/logout/?next=/"}
+    css = "/statics/css/bar_button.css"
+    js = ["/statics/js/jquery.min.js",
+          "/statics/js/bar_button.js"]
 
-    css = "css/topmenu.css"
+    css_class = "bar_button user_button"
+    template = "dashboard/widgets/user_button.html"
+
+    def text(self):
+        return self.dashboard.request.user.username
+
+    def image_src(self):
+        return self.dashboard.request.user.email
+
+    def host(self):
+        return self.dashboard.request.META["HTTP_HOST"]
 
 
-print ">>>> ", TopMenu().to_json()
-dashboard.register(TopMenu())
-dashboard.add_widget_to('header', TopMenu())
+class SettingButton (UserButton):
+    title = _("Setting Menu")
+    name = "setting_button"
+    image = True
+    gravatar = False
+    weight = 900
+    template = "dashboard/widgets/settings_button.html"
+    def text(self):
+        return False
+
+    def image_src(self):
+        return "/statics/image/settings.png"
+
+
+dashboard.register(UserButton())
+dashboard.add_widget_to('header', UserButton())
+dashboard.register(SettingButton())
+dashboard.add_widget_to('header', SettingButton())
+
 print  "<<<<<<<<<<<< ", dashboard.save_config()

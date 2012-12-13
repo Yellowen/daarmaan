@@ -1,8 +1,9 @@
 #id_header {
-    Background: black;
+    Background: #f1f1f1;
     width: 100%;
     font-weight: 700;
-    height: 30px;
+    height: 26px;
+
 }
 
 #id_header ul {
@@ -10,8 +11,3 @@
     padding-top: 5px;
 }
 
-#id_header ul li {
-    padding: 10px 10px;
-    display: inline;
-    position: relative;
-}

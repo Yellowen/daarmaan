@@ -7,12 +7,9 @@ html {
     font-size: 12px;
 
 }
-
 a {
-    color: #eeeeec;
-
+    text-decoration: none;
 }
-a:active {
-    color: #ffa500;
-}
-a:visited {color: #eeeeec;}
+.hide { display: none;}
+.left {float: left;}
+.right{float: right;}
