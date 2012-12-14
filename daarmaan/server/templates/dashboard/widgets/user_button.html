@@ -1,0 +1,19 @@
+{% load gravatar i18n %}
+<div class="{% if self.css_class %}{{ self.css_class }}{% else %}userbutton{% endif %}" id="{% if self.css_id  %}{{ self.css_id }}{% else %}id_{{ self.name }}{% endif %}">
+{% if self.image %}
+<img src="{% if self.gravatar %}{% gravatar_url self.image_src 18 self.host %}{% else %}{{ self.image_src }}{% endif %}" class="{% if self.gravatar %}gravatar{% endif %}">
+{% endif %}
+{% if self.text %}
+<p>{{ self.text }}</p>
+{% endif %}
+</div>
+
+<div class="submenu" belongs_to="{% if self.css_id  %}{{ self.css_id }}{% else %}id_{{ self.name }}{% endif %}">
+{% block menubox %}
+<img src="{% gravatar_url self.image_src 64 self.host %}" class="gravatar left">
+<ul class="right">
+  <li><a href="{% url profile-home %}">{% trans "My Profile" %}</a></li>
+  <li><a href="/logout/?next=/">{% trans "Logout" %}</a></li>
+</ul>
+{% endblock menubox %}
+</div>
