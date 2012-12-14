@@ -8,7 +8,7 @@ basic information about user and change the exists data.
 
 {% block content %}
 <section id="content">
-  <div class="box w600 center">
+  <div class="box span-15 center">
     <h2>{% trans "Edit Profile" %}</h2>
 
       <form action="{{ form.action }}" method="POST">{% csrf_token %}
@@ -33,7 +33,7 @@ basic information about user and change the exists data.
 	{% endif %}
 	{% endfor %}
 
-	<tr><td></td><td align="center"><input class="button" type="submit" value="{% trans "save" %}"></td></tr>
+	<tr><td></td><td align="center"><input class="button" type="submit" value="{% trans "save" %}"><button onclick="window.location='{% url profile-home %}';">{% trans 'Back' %}</button></td></tr>
 	</table>
       </form>
 

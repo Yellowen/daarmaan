@@ -10,7 +10,7 @@ View the user basic  profile information.
 
 {% block content %}
 <section id="content">
-  <div class="box w600 center">
+  <div class="box span-15 center">
     <h2>{% trans "Basic user information" %}</h2>
     <table class="formtable">
       <tr>
@@ -30,7 +30,7 @@ View the user basic  profile information.
 	<td>{% trans "Date joined" %}:</td><td>{{ user.date_joined }}</td>
       </tr>
       </table>
-    <p><button onclick="window.location='{% url edit-profile %}';">{% trans 'Edit' %}</button></p>
+    <p><button onclick="window.location='{% url edit-profile %}';">{% trans 'Edit' %}</button><button onclick="window.location='{% url dashboard-index %}';">{% trans 'Dashboard' %}</button></p>
   </div>
 </section>
 {{ form.media }}

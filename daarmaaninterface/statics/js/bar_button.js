@@ -7,9 +7,8 @@ $(function(){
     });
     $(".bar_button").click(function(){
 	var menu = $(".submenu[belongs_to='" + $(this).attr("id") + "']");
-	$(".submenu").not('.hide').addClass("hide");
-	menu.fadeIn("slow");
-	menu.removeClass("hide");
+	$(".submenu").not(menu).hide();
+	menu.fadeToggle("slow");
     });
 
 });

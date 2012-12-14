@@ -8,9 +8,9 @@
 {% endif %}
 </div>
 
-<div class="submenu" belongs_to="{% if self.css_id  %}{{ self.css_id }}{% else %}id_{{ self.name }}{% endif %}">
+<div class="submenu hide" belongs_to="{% if self.css_id  %}{{ self.css_id }}{% else %}id_{{ self.name }}{% endif %}">
 {% block menubox %}
-<img src="{% gravatar_url self.image_src 64 self.host %}" class="gravatar left">
+<img src="{% gravatar_url self.image_src 64 self.host %}" class="gravatarbig left">
 <ul class="right">
   <li><a href="{% url profile-home %}">{% trans "My Profile" %}</a></li>
   <li><a href="/logout/?next=/">{% trans "Logout" %}</a></li>

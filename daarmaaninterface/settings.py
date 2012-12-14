@@ -243,5 +243,6 @@ DASHBOARD_CONFIG = {
                           "css": "/statics/css/footer.css"},
                },
     "css": ["/statics/css/dashboard.css",
+            "/statics/css/forms.css",
             "/statics/css/fonts.css"],
 }
