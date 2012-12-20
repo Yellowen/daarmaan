@@ -1,0 +1,7 @@
+{% load i18n %}
+<select id="id_{{ self.name }}_select" class="combobox">
+{% for widget in widgets %}
+<option value="{{ widget }}">{{ widget }}</option>
+{% endfor %}
+</select>
+<button id="id_{{ self.name }}_button" class="button">{% trans "Add" %}</button>
