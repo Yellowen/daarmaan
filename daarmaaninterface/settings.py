@@ -139,7 +139,9 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     "vanda.core",
     'daarmaan.server',
+    'local_widgets',
     'vanda.apps.dashboard',
+
 )
 
 # A sample logging configuration. The only tangible logging
