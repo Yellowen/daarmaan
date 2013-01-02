@@ -98,7 +98,8 @@ class UserServices(models.Model):
     Services that user have access to.
     """
     user = models.ForeignKey("auth.User",
-                             verbose_name=_("permissions"))
+                             verbose_name=_("permissions"),
+                             unique=True)
 
     services = models.ManyToManyField(Service,
                                       verbose_name=_("service"))

@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 #    Daarmaan - Single Sign On Service for Yellowen
-#    Copyright (C) 2012 Yellowen
+#    Copyright (C) 2012-2013 Yellowen
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,22 +17,5 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
 
-from django.contrib import admin
-from models import Service, Profile, UserServices
-
-
-class ServiceAdmin (admin.ModelAdmin):
-    list_display = ("name", "key", "active", "user")
-    list_editable = ("active", )
-
-
-class ProfileAdmin (admin.ModelAdmin):
-    list_display = ("user", )
-
-
-class UserServicesAdmin (admin.ModelAdmin):
-    list_display = ("user", )
-
-admin.site.register(Service, ServiceAdmin)
-admin.site.register(Profile, ProfileAdmin)
-admin.site.register(UserServices, UserServicesAdmin)
+def urls (request):
+    pass

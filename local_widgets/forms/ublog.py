@@ -17,22 +17,10 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 # -----------------------------------------------------------------------------
 
-from django.contrib import admin
-from models import Service, Profile, UserServices
+from django import forms
 
 
-class ServiceAdmin (admin.ModelAdmin):
-    list_display = ("name", "key", "active", "user")
-    list_editable = ("active", )
+class SettingsForm(forms.Form):
 
-
-class ProfileAdmin (admin.ModelAdmin):
-    list_display = ("user", )
-
-
-class UserServicesAdmin (admin.ModelAdmin):
-    list_display = ("user", )
-
-admin.site.register(Service, ServiceAdmin)
-admin.site.register(Profile, ProfileAdmin)
-admin.site.register(UserServices, UserServicesAdmin)
+    api_key = forms.CharField()
+    

@@ -20,6 +20,8 @@
 import json
 import urllib
 import hashlib
+import logging
+
 from urlparse import urlparse, urlunparse, parse_qsl, ParseResult
 
 from django.conf.urls import patterns, include, url
@@ -35,6 +37,9 @@ from vakhshour.amp.ampy import Proxy
 
 from daarmaan.server.models import Service
 from daarmaan.utils import DefaultValidation
+
+
+logger = logging.getLogger('django')
 
 
 class DaarmaanServer(object):
@@ -85,17 +90,18 @@ class DaarmaanServer(object):
 
         # Does user authenticated before?
         if request.user.is_authenticated():
-
+            logger.debug("User is authenticated.")
             # If user is authenticated in Daarmaan then a ticket
             # (user session ID) will send back to service
             ticket = request.session.session_key
-
+            logger.debug("[TICKET]: %s" % ticket)
             params.update({'ticket': ticket,
                            "hash": validator.sign(ticket)})
 
         else:
             # If user is not authenticated simple ack answer will return
-            params.update({"ack": ""})
+            logger.debug("User is NOT authenticated.")
+            params.update({"ack": " "})
 
         next_url = ParseResult(next_url[0],
                                next_url[1],
@@ -138,12 +144,13 @@ class DaarmaanServer(object):
             a = {
                 "id": user.id,
                 "username": user.username,
-                 "first_name": user.first_name,
-                 "last_name": user.last_name,
-                 "email": user.email,
-                 "id": user.pk,
-                 "is_staff": user.is_staff,
-                 "is_active": user.is_active,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
+                "id": user.pk,
+                "is_staff": user.is_staff,
+                "is_active": user.is_active,
+                "is_superuser": user.is_superuser,
                  }
             m = True
         else:
@@ -197,7 +204,10 @@ class DaarmaanServer(object):
         try:
             service = Service.objects.get(name=service,
                                           active=True)
+            logger.info("[Service]: %s" % service)
+
         except Service.DoesNotExist:
+            logger.info("[Service]: Service is none.")
             return None
 
         return service

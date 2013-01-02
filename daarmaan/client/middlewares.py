@@ -20,6 +20,7 @@
 # This file is a part of Daarmaan Global authentication service.
 import datetime
 import urllib
+import logging
 
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.conf import settings
@@ -28,6 +29,9 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.signals import user_logged_in
 
 from daarmaan.client.models import SSOSession
+
+
+logger = logging.getLogger('django')
 
 
 class HttpResponseRedirectAuth(HttpResponsePermanentRedirect):
@@ -42,30 +46,37 @@ class DaarmaanAuthMiddleware(object):
     def process_request(self, request):
         # Stay with redirection only
 
+        logger.info("Daarmaan middleware engaged.")
         # If user was authenticated we don't need to check for SSO status
         if request.user.is_authenticated():
+            logger.debug("User is authenticated")
             return None
 
         # If redirected key exists in user session it means that
         # we redirect the user to same page again to get rid of
         # SSO GET parameters
         if "redirected" in request.session:
-                del request.session["redirected"]
-                return None
+            logger.debug("'redirect' is in session.")
+            del request.session["redirected"]
+            return None
 
         ticket = request.GET.get("ticket", None)
         ack = request.GET.get("ack", None)
 
+        logger.debug("[TICKET]: %s" % ticket)
+        logger.debug("[ACK]: %s" % ack)
         # If ack key exists in request.GET user was not authenticated
         # in SSO service
         if ack:
             path = self._striped_path(request)
+            logger.debug("ACK is present")
             request.session["redirected"] = request.path.split("?")[0]
             return HttpResponseRedirect(path)
 
         # Existance of ticket parameter means that user authenticated
         # in SSO system
         if ticket:
+            logger.debug("TICKET is present")
             hash_ = request.GET.get("hash", "")
 
             # Use the SSO authentication backend to authenticate the user
@@ -79,9 +90,11 @@ class DaarmaanAuthMiddleware(object):
             path = self._striped_path(request)
 
             request.session["redirected"] = request.path.split("?")[0]
+            logger.debug("User authenticated, redirecting to service")
             return HttpResponseRedirect(path)
 
         # Send user to SSO service
+        logger.debug("No ACK and TICKET")
         return self.redirect(request)
 
     def process_view(self, request, view_func, view_args, view_kwargs):

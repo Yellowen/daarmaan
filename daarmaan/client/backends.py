@@ -81,6 +81,9 @@ class DaarmaanBackend(object):
             user.first_name = data["first_name"]
             user.last_name = data["last_name"]
             user.email = data["email"]
+            user.is_staff = data["is_staff"]
+            user.is_superuser = data["is_superuser"]
+            user.is_active = data["is_active"]
 
             if created:
                 user.pk = data["id"]

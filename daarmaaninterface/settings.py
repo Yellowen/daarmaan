@@ -18,6 +18,8 @@
 # -----------------------------------------------------------------------------
 
 import os
+import sys
+
 
 ROOT = os.path.dirname(__file__)
 
@@ -155,30 +157,36 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
+            }
+        },
     'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+            }
         },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        }
-    },
     'loggers': {
+        'django': {
+            'handlers': ['console', ],
+            'level': 'DEBUG',
+            'propagate': True,
+            },
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['mail_admins', 'console'],
             'level': 'ERROR',
             'propagate': True,
-        },
-        'general': {
-            'handlers': ['console'],
+            },
+        'django.db.backends': {
             'level': 'DEBUG',
-            }
-    }
+            'handers': ['console'],
+            },
+        }
 }
 
 TEMPLATE_CONTEXT_PROCESSORS = (
