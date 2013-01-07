@@ -36,7 +36,7 @@ class UltraBlog(Widget):
     name = "ultra_blog_widget"
     template = "dashboard/widgets/ultra_blog.html"
 
-    service_name = "ultrablog.com"
+    service_name = "yellowers.com"
 
     pre_js = ["/statics/js/jquery.hashchange.min.js",
           "/statics/js/jquery.easytabs.min.js"]

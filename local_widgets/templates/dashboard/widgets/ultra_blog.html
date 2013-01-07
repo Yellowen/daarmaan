@@ -4,6 +4,8 @@
 {% else %}
 
 <h2>{{ self.title }}</h2>
+<select id="current-blog">
+</select>
 <div id="tab-container" class="tab-container">
   <ul class='etabs'>
     <li class='tab'><a href="#posts">{% trans "Posts" %}</a></li>
@@ -30,6 +32,7 @@
       {% csrf_token %}
       <table class="formtable">
 	{{ self.settings_form.as_table }}
+
       </table>
       <button class="btn">{% trans "Save" %}</button>
     </form>
