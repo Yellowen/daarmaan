@@ -27,15 +27,9 @@
     <!-- content -->
   </div>
   <div id="settings" >
-    <h2>CSS Styles for these tabs</h2>
-    <form action="{% url ublog-settings-view %}" method="POST" id="id_{{ self.class_name }}">
-      {% csrf_token %}
-      <table class="formtable">
-	{{ self.settings_form.as_table }}
-
-      </table>
-      <button class="btn">{% trans "Save" %}</button>
-    </form>
+    <h2>{% trans "Settings" %}</h2>
+    <input placeholder="{% trans 'Service' %}" value="{{ self.default_service }}">
+    <button class="btn">{% trans "Save" %}</button>
   </div>
 
   </div>

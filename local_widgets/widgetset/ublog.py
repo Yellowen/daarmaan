@@ -37,9 +37,10 @@ class UltraBlog(Widget):
     template = "dashboard/widgets/ultra_blog.html"
 
     service_name = "yellowers.com"
+    default_service = "http://www.yellowers.com:8000"
 
     pre_js = ["/statics/js/jquery.hashchange.min.js",
-          "/statics/js/jquery.easytabs.min.js"]
+              "/statics/js/jquery.easytabs.min.js"]
 
     settings_form = SettingsForm()
 
@@ -70,13 +71,13 @@ class UltraBlog(Widget):
             return HttpResponse(html.render(Context({"self": self})))
 
         try:
-
             services = UserServices.objects.get(
                 user=request.user).services.all()
 
             if not blog_service in services:
                 self.problem = True
                 self.msg = _("You don't have access to blog service.")
+
         except UserServices.DoesNotExist:
             self.problem = True
             self.msg = _("You don't have access to blog service.")
