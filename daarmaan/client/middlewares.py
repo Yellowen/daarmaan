@@ -21,6 +21,7 @@
 import datetime
 import urllib
 import logging
+import re
 
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.conf import settings
@@ -45,6 +46,11 @@ class DaarmaanAuthMiddleware(object):
 
     def process_request(self, request):
         # Stay with redirection only
+
+        if hasattr(settings, "DAARMAAN_EXCLUDE_URLS"):
+            for pattern in settings.DAARMAAN_EXCLUDE_URLS:
+                if re.match(pattern, request.path):
+                    return None
 
         logger.info("Daarmaan middleware engaged.")
         # If user was authenticated we don't need to check for SSO status
