@@ -20,7 +20,7 @@
       <h2 align="center">Yellowen Login</h2>
       <p class="msg {{ msgclass }}" align="center">{{ msg }}</p>
 
-      <form action="{% url home %}" method="POST">{% csrf_token %}
+      <form action="{% url "home" %}" method="POST">{% csrf_token %}
 
 	<table id="logintable">
 	  <tr>
@@ -43,7 +43,7 @@
     <div id="registerform">
       <h2 align="center">Register an account</h2>
       <p class="msg {{ msgclass }}" align="center">{{ msg }}</p>
-      <form action="{% url home %}" method="POST">{% csrf_token %}
+      <form action="{% url "home" %}" method="POST">{% csrf_token %}
 	<table id="logintable">
 	  {% for field in regform %}
 	  <tr>
