@@ -14,6 +14,7 @@
 <script src="{{ MEDIA_URL }}js/jquery.min.js" type="text/javascript"></script>
 <script src="{{ MEDIA_URL }}js/tab.js" type="text/javascript"></script>
 
+{% include "vanda/less/less.html" %}
 {% get_current_language_bidi as LANGUAGE_BIDI %}
 {% if LANGUAGE_BIDI %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/common_bidi.css" />

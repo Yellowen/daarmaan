@@ -22,6 +22,7 @@ import os
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from vanda.apps.dashboard.base import dashboard
 
@@ -36,6 +37,8 @@ urlpatterns = patterns('',
                        url(r"^", include("daarmaan.server.urls")),
 
 )
+
+urlpatterns += staticfiles_urlpatterns()
 
 urlpatterns += patterns('',
         (r'^statics/(?P<path>.*)$', 'django.views.static.serve',

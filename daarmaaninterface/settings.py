@@ -82,15 +82,14 @@ MEDIA_URL = '/statics/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(ROOT, "statics/auto/")
+STATIC_ROOT = os.path.join(ROOT, "/statics/static/")
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/statics/auto/'
+STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(ROOT, "statics/").replace("\\", "/"),
 )
 
 # List of finder classes that know how to find static files in
@@ -143,6 +142,7 @@ INSTALLED_APPS = (
     'daarmaan.server',
     'local_widgets',
     'vanda.apps.dashboard',
+    'vanda.js.less',
 
 )
 
@@ -194,6 +194,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
+    'django.core.context_processors.static',
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
     # Project information contexts
@@ -254,10 +255,10 @@ DASHBOARD_CONFIG = {
                    "class": "HorizontalBar",
                    "css": "/statics/css/footer.css"},
         },
-    
+
     "js_path": "/statics/dashboard/js/",
     "css_path": "/statics/dashboard/css/",
-    
+
     "css": ["/statics/css/dashboard.css",
             "/statics/css/forms.css",
             "/statics/css/fonts.css"],
