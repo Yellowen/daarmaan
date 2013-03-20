@@ -22,6 +22,7 @@ import sys
 
 
 ROOT = os.path.dirname(__file__)
+root = lambda x: os.path.join(ROOT, x)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -71,22 +72,22 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = root("daamrmaaninterface/media")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = '/statics/'
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(ROOT, "/statics/static/")
+STATIC_ROOT = root("/statics/")
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = '/statics/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -127,7 +128,7 @@ ROOT_URLCONF = 'daarmaaninterface.urls'
 WSGI_APPLICATION = 'daarmaaninterface.wsgi.application'
 
 TEMPLATE_DIRS = (
-    os.path.join(ROOT, "templates/").replace("\\", "/"),
+    root("templates/"),
 )
 
 INSTALLED_APPS = (
@@ -140,7 +141,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     "vanda.core",
     'daarmaan.server',
-    'local_widgets',
     'vanda.apps.dashboard',
     'vanda.js.less',
 
@@ -237,29 +237,3 @@ try:
 
 except ImportError:
     pass
-
-
-DASHBOARD_CONFIG = {
-    "blocks": {
-        "config": {"title": "settings_panel",
-                   "class": "SlideArea"},
-        "header": {"title": "header",
-                   "class": "HorizontalBar",
-                   "order_matters": True,
-                   "css": "/statics/css/header.css"},
-        "body": {"title": "Dashboard",
-                 "class": "WidgetArea",
-                 "css": ["/statics/css/widgetarea.css"],
-                 "js": "/statics/js/masonry.min.js"},
-        "footer": {"title": "footer",
-                   "class": "HorizontalBar",
-                   "css": "/statics/css/footer.css"},
-        },
-
-    "js_path": "/statics/dashboard/js/",
-    "css_path": "/statics/dashboard/css/",
-
-    "css": ["/statics/css/dashboard.css",
-            "/statics/css/forms.css",
-            "/statics/css/fonts.css"],
-}

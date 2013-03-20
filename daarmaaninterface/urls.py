@@ -41,7 +41,7 @@ urlpatterns = patterns('',
 urlpatterns += staticfiles_urlpatterns()
 
 urlpatterns += patterns('',
-        (r'^statics/(?P<path>.*)$', 'django.views.static.serve',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
          {'document_root': os.path.join(os.path.dirname(__file__),\
-                                        'statics').replace('\\', '/')}),
+                                        'media').replace('\\', '/')}),
 )
