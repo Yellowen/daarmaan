@@ -37,7 +37,11 @@
   <header>
       {% block header %}
       <nav class="pull-left">
-
+	<ul>
+	  <li>	<a href="//www.yellowen.com/">{% trans "Yellowen" %}</a></li>
+	  <li>|</li>
+	  <li>	<a href="/">{% trans "Accounts" %}</a></li>
+	</ul>
       </nav>
 
       <nav class="pull-right">
@@ -51,6 +55,21 @@
   </div>
 
   {% block footer %}
+  <footer>
+    <small>
+      <p class="pull-left">© {% trans '2012-2013 Yellowen Inc.' %}</p>
+      <nav>
+	<ul class="pull-right">
+	  <li><a href="//daarmaan.yellowen.com/">{% trans "Daarmaan" %}</a></li>
+	  <li><a href="/tos/">{% trans "Term of Service" %}</a></li>
+	  <li><a href="/privacy/">{% trans "Privacy Policy" %}</a></li>
+	  <li><a href="/help/">{% trans "Help" %}</a></li>
+
+	</ul>
+      </nav>
+    </small>
+  </footer>
+
   {% endblock %}
 
   {% endblock body %}

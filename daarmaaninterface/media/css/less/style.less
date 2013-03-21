@@ -20,15 +20,28 @@ header {
     position: absolute;
     z-index: 500;
     width: 100%;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
 
-    nav {
-	a {
-	    color: #BB3E87;
+}
+
+nav {
+    ul {
+	list-style: none;
+	li {
+	    margin: 0 10px;
+	    display: inline;
+	    a, a:visited{
+		color: @grayLight;
+		.transition(color 300ms linear 0ms)
+	    }
+	    a:hover, a:active {
+		color: @grayLighter;
+		text-decoration: none;
+		.transition(color 300ms linear 0ms)
+	    }
 	}
     }
 }
-
-
 
 footer {
     width: 100%;
@@ -41,22 +54,6 @@ footer {
     p {
 	color: @grayLight;
 	padding: 0 0px 0 10px;
-    }
-    ul {
-	list-style: none;
-	li {
-	    margin: 0 10px;
-	    display: inline;
-	    a {
-		color: @grayLight;
-		.transition(color 300ms linear 0ms)
-	    }
-	    a:hover {
-		color: @grayLighter;
-		text-decoration: none;
-		.transition(color 300ms linear 0ms)
-	    }
-	}
     }
 }
 
@@ -73,7 +70,7 @@ footer {
     background: white;
     border-radius: 5px;
     color: @grayDarker;
-
+    z-index: 500;
     .box-shadow(0 0 7px rgba(0, 0, 0, 0.3));
 
     .box-header {
@@ -112,4 +109,15 @@ footer {
 .center {
     position: relative;
     margin: 0 auto;
+}
+
+.errorlist {
+    list-style: none;
+    .text-error;
+}
+#recaptcha_widget {
+    margin-top: 10px;
+    .captcha_link {
+	.dir-padding-right(10px);
+    }
 }

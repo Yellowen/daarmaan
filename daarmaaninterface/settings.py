@@ -143,6 +143,7 @@ INSTALLED_APPS = (
     'daarmaan.server',
     'vanda.apps.dashboard',
     'vanda.js.less',
+    'captcha',
 
 )
 
@@ -226,7 +227,7 @@ VAKHSHOUR = {
 EMAIL_VERIFICATION = False
 
 try:
-    import smtp_settings
+    from conf import smtp_settings
 
     EMAIL_HOST = smtp_settings.EMAIL_HOST
     EMAIL_PORT = smtp_settings.EMAIL_PORT
@@ -237,3 +238,16 @@ try:
 
 except ImportError:
     pass
+
+
+try:
+    from conf import recaptcha
+
+    RECAPTCHA_PRIVATE_KEY = recaptcha.PRIV_KEY
+    RECAPTCHA_PUBLIC_KEY = recaptcha.PUB_KEY
+
+except ImportError:
+
+    pass
+
+EMAIL_VERIFICATION = True

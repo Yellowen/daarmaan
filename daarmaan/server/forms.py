@@ -21,31 +21,9 @@ import urllib
 from django import forms
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
+from captcha.fields import ReCaptchaField
 
 from daarmaan.server.models import BasicProfile
-
-
-class AjaxWidget(forms.TextInput):
-    """
-    An abstract ajax widget, using this widget cause that form field
-    intract with the server via ajax process.
-    """
-
-    def __init__(self, field_name, url, *args, **kwargs):
-        self.url = url
-        self.fname = field_name
-        super(AjaxWidget, self).__init__(*args, **kwargs)
-
-    def _media(self):
-        a = forms.Media(
-            css={'all': ('ajaxwidget.css',)},
-            js=(
-                reverse("gauth.views.statics.ajax_widget_jsonp",
-                    args=[]) + "?validator=%s" % urllib.urlencode(self.url), ))
-        print "]]]] ", a
-        return a
-
-    Media = property(_media)
 
 
 class LoginForm(forms.Form):
@@ -54,13 +32,14 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=64,
                                label=_("password"),
                                widget=forms.PasswordInput())
-    remember_me = forms.BooleanField(label=_("Remember me"))
+    remember_me = forms.BooleanField(label=_("Remember me"), required=False)
 
 
 class PreRegistrationForm(forms.Form):
-    username = forms.CharField(max_length=30, label=_("Username"),
-                               widget=AjaxWidget("asd", "asdasD"))
-    email = forms.EmailField(label=_("Email"), widget=AjaxWidget("aaa", "ad"))
+    username = forms.CharField(max_length=30, label=_("Username"))
+    email = forms.EmailField(label=_("Email"))
+    captcha = ReCaptchaField(attrs={"theme" : 'custom',
+                                    "custom_theme_widget": 'recaptcha_widget'})
 
 
 class PostRegistrationForm(forms.Form):

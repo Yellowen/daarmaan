@@ -27,11 +27,11 @@ urlpatterns = patterns('',
 
     #url(r"^login/$", "daarmaan.server.views.general.login_view", name="login"),
 
-    url(r"^gstatics/$", "daarmaan.server.views.statics.serv_statics",
-        name="statics-serv"),
-    url(r"^jsonp/validate/$",
-        "daarmaan.server.views.statics.ajax_widget_jsonp",
-        name="ajax-widget-jsonp"),
+    #url(r"^gstatics/$", "daarmaan.server.views.statics.serv_statics",
+    #    name="statics-serv"),
+    #url(r"^jsonp/validate/$",
+    #    "daarmaan.server.views.statics.ajax_widget_jsonp",
+    #    name="ajax-widget-jsonp"),
 
     # Password reset -------------------------
     url(r'^password_reset/$',

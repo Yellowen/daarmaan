@@ -27,7 +27,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.conf.urls import patterns, url
 from django.conf import settings
 
-from daarmaan.server.forms import PreRegistrationForm, NewUserForm
+from daarmaan.server.forms import PreRegistrationForm, NewUserForm, LoginForm
 from daarmaan.server.models import VerificationCode
 
 
@@ -36,6 +36,7 @@ class IndexPage(object):
     Daarmaan index page class.
     """
     template = "index.html"
+    register_template = "register.html"
     new_user_form_template = "new_user_form.html"
 
     @property
@@ -47,6 +48,9 @@ class IndexPage(object):
             '',
             url(r"^$", self.index,
                 name="home"),
+            url(r"^register/$", self.pre_register,
+                name="home"),
+
             url(r"^verificate/([A-Fa-f0-9]{40})/$", self.verificate,
                 name="verificate"),
             url(r"^registration/done/$", self.registration_done,
@@ -63,71 +67,65 @@ class IndexPage(object):
             return HttpResponseRedirect(reverse('dashboard-index'))
 
         if request.method == "POST":
-            return self.on_post(request)
-        else:
-            return self.on_get(request)
-
-    def on_get(self, request):
-        """
-        This view handles GET requests.
-        """
-        form = PreRegistrationForm()
-        next_url = request.GET.get("next", "")
-        return rr(self.template,
-                  {"regform": form,
-                   "next": next_url},
-                  context_instance=RequestContext(request))
-
-    def on_post(self, request):
-        """
-        This view handles POST requests.
-        """
-
-        if request.POST["form"] == "login":
             return self.login(request)
+
         else:
-            return self.pre_register(request)
+            form = LoginForm()
+            next_url = request.GET.get("next", "")
+            return rr(self.template,
+                      {"form": form,
+                       "next": next_url},
+                      context_instance=RequestContext(request))
+
 
     def login(self, request):
         """
         Login view that only accept a POST request.
         """
-        username = request.POST['username']
-        password = request.POST['password']
-        remember = request.POST.get("remember_me", False)
         next_url = request.POST.get("next", None)
 
-        form = PreRegistrationForm()
+        form = LoginForm(request.POST)
 
-        # Authenticate the user
-        user = authenticate(username=username,
-                            password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                self._setup_session(request)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            remember = form.cleaned_data.get("remember_me", False)
+            next_url = form.cleaned_data.get("next", None)
 
-                if next_url:
-                    return HttpResponseRedirect(next_url)
+            # Authenticate the user
+            user = authenticate(username=username,
+                               password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    self._setup_session(request)
 
-                return redirect(reverse(
-                    "dashboard-index",
-                    args=[]))
+                    if next_url:
+                        return HttpResponseRedirect(next_url)
+
+                    return redirect(reverse(
+                        "dashboard-index",
+                        args=[]))
+                else:
+                    return rr(self.template,
+                              {"form": form,
+                               "msgclass": "text-error",
+                               "next": next_url,
+                               "msg": _("Your account is disabled.")},
+                              context_instance=RequestContext(request))
             else:
                 return rr(self.template,
-                          {"regform": form,
-                           "msgclass": "error",
+                          {"form": form,
+                           "msgclass": "text-error",
                            "next": next_url,
-                           "msg": _("Your account is disabled.")},
+                           "msg": _("Username or Password is invalid.")},
                           context_instance=RequestContext(request))
 
         else:
             return rr(self.template,
-                      {"regform": form,
-                       "msgclass": "error",
-                       "next": next_url,
-                       "msg": _("Username or Password is invalid.")},
-                      context_instance=RequestContext(request))
+                      {"form": form,
+                       "next": next_url},
+                       context_instance=RequestContext(request))
 
     def pre_register(self, request):
         """
@@ -136,54 +134,62 @@ class IndexPage(object):
         from django.contrib.auth.models import User
         from django.db import IntegrityError
 
-        form = PreRegistrationForm(request.POST)
-        if form.is_valid():
-            # In case of valid information from user.
-            email = form.cleaned_data["email"]
-            username = form.cleaned_data["username"]
+        if request.method == "POST":
+            form = PreRegistrationForm(request.POST)
+            msg = None
+            klass = ""
+            if form.is_valid():
+                # In case of valid information from user.
+                email = form.cleaned_data["email"]
+                username = form.cleaned_data["username"]
 
-            # Check for email exists
-            emails_count = User.objects.filter(email=email).count()
-            if emails_count:
-                failed = True
-                msg = _("This email has been registered before.")
-                klass = "error"
+                # Check for email exists
+                emails_count = User.objects.filter(email=email).count()
+                if emails_count:
+                    failed = True
+                    msg = _("This email has been registered before.")
+                    klass = "text-error"
 
-            else:
-                try:
-                    # Create and save an inactive user
-                    user = User(username=username,
+                else:
+                    try:
+                        # Create and save an inactive user
+                        user = User(username=username,
                                 email=email)
-                    user.active = False
-                    user.save()
+                        user.active = False
+                        user.save()
 
-                    if settings.EMAIL_VERIFICATION:
-                        # Generate and send a verification code to user
-                        # only if EMAIL_VERIFICATION was set
-                        verif_code = VerificationCode.generate(user)
+                        if settings.EMAIL_VERIFICATION:
+                            # Generate and send a verification code to user
+                            # only if EMAIL_VERIFICATION was set
+                            verif_code = VerificationCode.generate(user)
 
-                        verification_link = reverse("verificate",
-                                                    args=[verif_code])
+                            verification_link = reverse("verificate",
+                                                        args=[verif_code])
 
-                        print ">>> ", verification_link
-                        self.send_verification_mail(user,
-                                               verification_link)
+                            print ">>> ", verification_link
+                            self.send_verification_mail(user,
+                                                        verification_link)
 
-                        msg = _("A verfication mail has been sent to your e-mail address.")
-                    else:
-                        msg = _("You're request submited, thanks for your interest.")
+                            msg = _("A verfication mail has been sent to your e-mail address.")
+                        else:
+                            msg = _("You're request submited, thanks for your interest.")
 
-                    klass = "info"
-                    form = PreRegistrationForm()
-                except IntegrityError:
-                    # In case of exists username
-                    msg = _("User already exists.")
-                    klass = "error"
+                        klass = "text-success"
+                        form = PreRegistrationForm()
+                    except IntegrityError:
+                        # In case of exists username
+                        msg = _("User already exists.")
+                        klass = "text-error"
 
-        return rr(self.template,
-                  {"regform": form,
-                   "msgclass": klass,
-                   "msg": msg},
+            return rr(self.register_template,
+                  {"form": form,
+                   "msg": msg,
+                   "msgclass": klass},
+                  context_instance=RequestContext(request))
+        else:
+            form = PreRegistrationForm()
+            return rr(self.register_template,
+                  {"form": form},
                   context_instance=RequestContext(request))
 
     def _setup_session(self, request):
@@ -242,9 +248,10 @@ class IndexPage(object):
             form = NewUserForm(request.POST)
             try:
                 verified_code = VerificationCode.objects.get(
-                    code=request.POST.get("verification_code", ""))
+                    code = request.POST.get("verification_code", ""))
 
             except VerificationCode.DoesNotExist:
+                from django.http import HttpResponseForbidden
                 return HttpResponseForbidden()
 
             if form.is_valid():
@@ -258,17 +265,17 @@ class IndexPage(object):
                         "password1": _("Two password fields did not match."),
                         "password2": _("Two password fields did not match.")}
                     msg = _("Two password fields did not match.")
-                    klass = "error"
+                    klass = "text-error"
                 elif len(pass1) < 6:
                     form._errors = {
                         "password1": _("Password should be more than 6 character long.")}
                     msg = _("Password should be more than 6 character long.")
-                    klass = "error"
+                    klass = "text-error"
                 elif len(pass1) > 40:
                     form._errors = {
                         "password1": _("Password should be less than 40 character long.")}
                     msg = _("Password should be less than 40 character long.")
-                    klass = "error"
+                    klass = "text-error"
                 else:
                     user = verified_code.user
                     user.set_password(pass1)
@@ -291,11 +298,12 @@ class IndexPage(object):
                         "dashboard-index",
                         args=[]))
 
+            print ">>> ", msg
             return rr(self.new_user_form_template,
                       {"form": form,
                        "user": verified_code.user,
                        "msg": msg,
-                       "klass": klass},
+                       "msgclass": klass},
                       context_instance=RequestContext(request))
         else:
             raise Http404()

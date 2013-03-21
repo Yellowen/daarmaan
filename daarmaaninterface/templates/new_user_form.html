@@ -1,0 +1,85 @@
+{% extends 'base.html'%}
+{% load i18n %}
+
+{% comment %}
+This Template is responsible for rendering the NewUserForm form and collect the
+basic information about user after the email verification process.
+{% endcomment %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="offset3 span6 box">
+
+      <div class="box-header row">
+	<div class="span3">
+	  <h2>{% trans "Basic user information" %}</h2>
+
+	</div>
+	<div class="span1 offset2" class="buttons">
+	  <span>{% trans "Yellowen" %}</span>
+	</div>
+      </div>
+
+      <div class="box-body row">
+
+
+	<form action="{{ form.action }}" method="POST">{% csrf_token %}
+
+
+	  <div class="span4 offset1">
+	    <p>{% trans "In order to complete the registration process please fill the requested fields." %}
+	      <br />
+	      <br />
+	    {% if form.non_field_errors %}
+	    <p class="text-error">{{ form.non_field_errors }}</p>
+	    {% endif %}
+
+	    {% if msg %}
+	    <p class="{{ msgclass }}">{{ msg }}</p>
+	    <br />
+	    {% endif %}
+
+	    {% if form.first_name.errors %}
+	    <p class="text-error">{{ form.first_name.errors }}</p>
+	    {% endif %}
+
+	    <input class="wide" type="text" name="first_name" placeholder="{% trans "First Name" %} ..." />
+
+	    {% if form.last_name.errors %}
+	    <p class="text-error">{{ form.last_name.errors }}</p>
+	    {% endif %}
+
+	    <input class="wide" type="last_name" name="text" placeholder="{% trans "Last Name" %} ..." />
+
+	    {% if form.password1.errors %}
+	    <p class="text-error">{{ form.password1.errors }}</p>
+	    {% endif %}
+
+	      <input class="wide" type="password" name="password1" placeholder="{% trans "Password" %} ..." />
+
+	    {% if form.password1.errors %}
+	    <p class="text-error">{{ form.password2.errors }}</p>
+	    {% endif %}
+
+	      <input class="wide" type="password" name="password2" placeholder="{% trans "Repeat Password" %} ..." />
+	      {{ form.verification_code }}
+
+	    <br />
+	  </div>
+      </div>
+
+      <div class="box-footer row">
+	<div class="span2 offset4">
+	  <input type="submit" class="btn" value="{% trans "Finish" %}" />
+	</div>
+      </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+{{ form.media }}
+{% endblock content %}

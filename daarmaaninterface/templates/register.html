@@ -7,13 +7,14 @@
 
 
 {% block content %}
+
 <div class="container">
   <div class="row">
     <div class="offset3 span6 box">
 
       <div class="box-header row">
 	<div class="span3">
-	  <h2>{% trans "Login" %}</h2>
+	  <h2>{% trans "Register" %}</h2>
 	</div>
 	<div class="span1 offset2" class="buttons">
 	  <span>{% trans "Yellowen" %}</span>
@@ -44,31 +45,32 @@
 	      <input class="wide" type="text" name="username" placeholder="{% trans "Username ..." %}" />
 	      <span class="add-on"><i class="icon-user"></i></span>
 	    </div>
-	    {% if form.password.errors %}
-	    <p class="text-error">{{ form.password.errors }}</p>
+	    {% if form.email.errors %}
+	    <p class="text-error">{{ form.email.errors }}</p>
 	    {% endif %}
 
 	    <div class="append-input">
-	      <input class="wide" type="password" name="password" placeholder="{% trans "Password ..." %}" />
-	      <span class="add-on"><i class="icon-asterisk"></i></span>
+	      <input class="wide" type="email" name="email" placeholder="{% trans "Email ..." %}" />
+	      <span class="add-on"><i class="icon-envelope"></i></span>
 	    </div>
 
-	    <input type="hidden" name="next" value="{{ next }}" />
+	    {% if form.captcha.errors %}
+	    <p class="text-error">{{ form.captcha.errors }}</p>
+	    {% endif %}
+
+	    {{ form.captcha }}
+
 	    <br />
 
-	    <div>
-	      <small>
-		<p><a href="/password_reset/">{% trans "I forgot my password" %}</a></p>
-		<p><a href="/register/">{% trans "I don't have an account yet" %}</a></p>
-	      </small>
-	    </div>
 	    <br />
+	    <br />
+
 	  </div>
       </div>
 
       <div class="box-footer row">
 	<div class="span2 offset4">
-	  <input type="submit" class="btn" value="{% trans "Sign in" %}" />
+	  <input type="submit" class="btn" value="{% trans "Register" %}" />
 	</div>
       </div>
       </form>
@@ -76,5 +78,6 @@
   </div>
 
 </div>
+
 
 {% endblock content %}

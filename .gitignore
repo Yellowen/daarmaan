@@ -8,3 +8,4 @@ dist/
 MANIFEST
 env/
 daarmaaninterface/media/lib/*
+conf/*

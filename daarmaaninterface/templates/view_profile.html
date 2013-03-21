@@ -1,0 +1,58 @@
+{% extends global|yesno:'base.html,dashboard/base.html'%}
+{% load i18n %}
+
+{% comment %}
+View the user basic  profile information.
+{% endcomment %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="offset3 span6 box">
+
+      <div class="box-header row">
+	<div class="span3">
+
+	  <h2>{% trans "Profile" %}</h2>
+	</div>
+	<div class="span1 offset2" class="buttons">
+	  <span>{% trans "Yellowen" %}</span>
+	</div>
+      </div>
+
+      <div class="box-body row">
+	<div class="span4 offset1">
+
+
+	  <table class="table">
+	    <tr>
+	      <td>{% trans "First name" %}:</td><td>{% if user.first_name %}{{ user.first_name }}{% else %}-{% endif %}</td>
+	    </tr>
+	    <tr>
+	      <td>{% trans "Last name" %}:</td><td>{% if user.last_name %}{{ user.last_name }}{% else %}-{% endif %}</td>
+	    </tr>
+	    <tr>
+	      <td>{% trans "Username" %}:</td><td>{{ user.username }}</td>
+	    </tr>
+	    <tr>
+
+	      <td>{% trans "Email" %}:</td><td>{{ user.email }}</td>
+	    </tr>
+	    <tr>
+	      <td>{% trans "Date joined" %}:</td><td>{{ user.date_joined }}</td>
+	    </tr>
+	  </table>
+	</div>
+      </div>
+      <br />
+      <div class="box-footer row">
+	<div class="span4 offset1">
+
+	  <button onclick="window.location='{% url "edit-profile" %}';" class="btn btn-warning pull-left">{% trans 'Edit' %}</button><button class="btn pull-right btn-info" onclick="window.location='{% url "dashboard-index" %}';">{% trans 'Dashboard' %}</button>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+{{ form.media }}
+{% endblock content %}
