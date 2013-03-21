@@ -101,22 +101,24 @@ class ProfileActions(object):
         except User.DoesNotExist:
             raise Http404()
 
-        profile = self._get_user_profile(request.user)
-        if not profile.is_public() and user != request.user:
-            # TODO: Show a suitable page to user in case of
-            # private profile
-            raise Http404()
+        profile = self._get_user_profile(user)
+        ## if not profile.is_public() and user != request.user:
+        ##     # TODO: Show a suitable page to user in case of
+        ##     # private profile
+        ##     raise Http404()
 
         return rr(self.view_profile_template,
-                  {"user": request.user,
+                  {"user": user,
                    "profile": profile,
-                   "global": True},
+                   "global": True,
+                   "can_edit": user.username == request.user.username},
                   context_instance=RequestContext(request))
 
     def _get_user_profile(self, user):
         """
         Get or create a basic profile object for given user.
         """
+
         try:
             p = BasicProfile.objects.get(user=user)
 

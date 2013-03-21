@@ -47,8 +47,9 @@ View the user basic  profile information.
       <br />
       <div class="box-footer row">
 	<div class="span4 offset1">
-
+	  {% if can_edit %}
 	  <button onclick="window.location='{% url "edit-profile" %}';" class="btn btn-warning pull-left">{% trans 'Edit' %}</button><button class="btn pull-right btn-info" onclick="window.location='{% url "dashboard-index" %}';">{% trans 'Dashboard' %}</button>
+	  {% endif %}
 	</div>
       </div>
     </div>

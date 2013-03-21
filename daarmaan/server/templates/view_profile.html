@@ -30,7 +30,11 @@ View the user basic  profile information.
 	<td>{% trans "Date joined" %}:</td><td>{{ user.date_joined }}</td>
       </tr>
       </table>
+    {% if can_edit %}
     <p><button onclick="window.location='{% url edit-profile %}';">{% trans 'Edit' %}</button><button onclick="window.location='{% url dashboard-index %}';">{% trans 'Dashboard' %}</button></p>
+    {% endif %}
+
+
   </div>
 </section>
 {{ form.media }}
