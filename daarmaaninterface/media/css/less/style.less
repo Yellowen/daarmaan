@@ -1,0 +1,115 @@
+@import "/media/lib/Riuma/less/Riuma.less";
+
+@contentColor1: #6EB43C 0%;
+@contentColor2: #417728;
+@topNavHeight: 55px;
+
+.gradient-radial(@A, @B) {
+    background-image: -moz-radial-gradient(center center, circle, @A, @B);
+    background-image: -webkit-radial-gradient(center center, circle, @A, @B);
+    background-image: -o-radial-gradient(center center, circle, @A, @B);
+    background-image: radial-gradient(center center, circle, @A, @B);
+}
+
+.radial_gradient {
+    .gradient-radial(@contentColor1, @contentColor2);
+}
+
+header {
+    color: @grayLighter;
+    position: absolute;
+    z-index: 500;
+    width: 100%;
+
+    nav {
+	a {
+	    color: #BB3E87;
+	}
+    }
+}
+
+
+
+footer {
+    width: 100%;
+    color: @textColor;
+    position: absolute;
+    bottom: 0px;
+    z-index: 500;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+
+    p {
+	color: @grayLight;
+	padding: 0 0px 0 10px;
+    }
+    ul {
+	list-style: none;
+	li {
+	    margin: 0 10px;
+	    display: inline;
+	    a {
+		color: @grayLight;
+		.transition(color 300ms linear 0ms)
+	    }
+	    a:hover {
+		color: @grayLighter;
+		text-decoration: none;
+		.transition(color 300ms linear 0ms)
+	    }
+	}
+    }
+}
+
+#content {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.box {
+    margin-top: 20%;
+    background: white;
+    border-radius: 5px;
+    color: @grayDarker;
+
+    .box-shadow(0 0 7px rgba(0, 0, 0, 0.3));
+
+    .box-header {
+	height: 60px;
+
+	h2 {
+	    padding: 0 20px;
+	    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+	}
+
+	span {
+	    color: @grayLight;
+
+	}
+    }
+
+    .box-body {
+	min-height: 120px;
+	position: relative;
+	width: 100%;
+	display: block;
+	padding-top: 40px;
+
+	input {
+	    margin: 5px auto;
+	    width: 255px;
+	}
+
+    }
+
+    .box-footer {
+	min-height: 50px;
+    }
+}
+
+.center {
+    position: relative;
+    margin: 0 auto;
+}

@@ -8,16 +8,68 @@
 
 {% block content %}
 <div class="container">
-<div class="row">
-  <div class="span6">
-    <form>
+  <div class="row">
+    <div class="offset3 span6 box">
 
-    </form>
+      <div class="box-header row">
+	<div class="span3">
+	  <h2>{% trans "Login" %}</h2>
+	</div>
+	<div class="span1 offset2" class="buttons">
+	  <span>{% trans "Yellowen" %}</span>
+	</div>
+      </div>
+
+      <div class="box-body row">
+
+	<div class="span4 offset1">
+	  <div class="append-input">
+	    <input class="wide" type="text" name="username" placeholder="{% trans "Username ..." %}" />
+	    <span class="add-on"><i class="icon-user"></i></span>
+	  </div>
+
+	  <div class="append-input">
+	    <input class="wide" type="password" name="password" placeholder="{% trans "Password ..." %}" />
+	    <span class="add-on"><i class="icon-asterisk"></i></span>
+	  </div>
+
+	  <br />
+
+	  <div>
+	    <small>
+	    <p><a href="/forget/password/">{% trans "I forgot my password" %}</a></p>
+	    <p><a href="/register/">{% trans "I don't have an account yet" %}</a></p>
+	    </small>
+	  </div>
+	  <br />
+	</div>
+      </div>
+
+      <div class="box-footer row">
+	<div class="span2 offset4">
+	  <button class="btn">{% trans "Sign in" %}</button>
+	</div>
+      </div>
+    </div>
   </div>
-  <div class="span6">
-  </div>
-</div>
 
 </div>
 
 {% endblock content %}
+
+{% block footer %}
+<footer>
+  <small>
+    <p class="pull-left">© {% trans '2012-2013 Yellowen Inc.' %}</p>
+
+    <ul class="pull-right">
+      <li><a href="//daarmaan.yellowen.com/">{% trans "Daarmaan" %}</a></li>
+      <li><a href="/tos/">{% trans "Term of Service" %}</a></li>
+      <li><a href="/privacy/">{% trans "Privacy Policy" %}</a></li>
+      <li><a href="/help/">{% trans "Help" %}</a></li>
+
+    </ul>
+  </small>
+</footer>
+
+{% endblock %}

@@ -2,62 +2,58 @@
 {% load i18n %}
 {% get_current_language_bidi as lang %}
 <html lang="{{ lang.code }}">
-<head>
-{% block head %}
-<meta name="description" content=""/>
-<meta name="keywords" content=""/>
-<title>
-{% block title %}
-{% trans 'Daarmaan' %}
-{% endblock %}
-</title>
+  <head>
+    {% block head %}
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+    <title>
+      {% block title %}
+      {% trans 'Daarmaan' %}
+      {% endblock %}
+    </title>
 
-<link REL="SHORTCUT ICON" HREF="{{ MEDIA_URL }}images/favorite.ico">
-{% if lang.bidi %}
+    <link REL="SHORTCUT ICON" HREF="{{ MEDIA_URL }}images/favorite.ico">
+    {% if lang.bidi %}
 
-{% else %}
-<link rel="stylesheet" href="{{ MEDIA_URL }}css/fonts.css">
-{% endif %}
+    {% else %}
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/fonts.css">
+    {% endif %}
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/direction.js" id="direction" data-dir="{% if lang.bidi %}rtl{% else %}ltr{% endif %}"></script>
-<link rel="stylesheet/less" type="text/css" href="{{ MEDIA_URL }}lib/Riuma/less/Riuma.less" id="less_init" data-env="{{ LESS_ENV }}" data-async="{{ LESS_ASYNC }}" data-rootpath="{{ MEDIA_URL}}lib/Riuma/less/"/>
-{% include "vanda/less/less.html" %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/direction.js" id="direction" data-dir="{% if lang.bidi %}rtl{% else %}ltr{% endif %}"></script>
+    <link rel="stylesheet/less" type="text/css" href="{{ MEDIA_URL }}css/less/style.less" id="less_init" data-env="development" data-async="false" data-rootpath="{{ MEDIA_URL}}lib/Riuma/less/"/>
+    {% include "vanda/less/less.html" %}
 
-{% endblock %}
+    {% endblock %}
 
-{% block extrahead %}
-{% endblock extrahead %}
+    {% block extrahead %}
+    {% endblock extrahead %}
 
-</head>
+  </head>
 
 
-<body class="radial_gradient max">
+  <body>
   {% block body %}
 
-  <header class="header">
-    <div class="container">
-    {% block header %}
-    <h1 class="brand"><i class="icon-user"></i>{% trans "Yellowen" %}</h1><span id="accounts" class="slug">{% trans "Accounts" %}</span>
-    <span "menu">{% trans "Daarmaan" %}</span>
-    {% endblock header %}
-    </div>
+  <header>
+      {% block header %}
+      <nav class="pull-left">
+
+      </nav>
+
+      <nav class="pull-right">
+      </nav>
+      {% endblock header %}
   </header>
 
-  <div id="content">
+  <div id="content" class="radial_gradient">
     {% block content %}
     {% endblock %}
   </div>
 
-  <footer>
-    {% block footer %}
+  {% block footer %}
+  {% endblock %}
 
-    <section id="fcontent">
-      <p id="copyrighted">© {% trans '2012-2013 Yellowen Inc.' %}</p>
-    </section>
-
-    {% endblock %}
-  </footer>
   {% endblock body %}
 
-</body>
+  </body>
 </html>
