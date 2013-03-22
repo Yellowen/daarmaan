@@ -24,17 +24,14 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from vanda.apps.dashboard.base import dashboard
-
 
 admin.autodiscover()
-dashboard.auto_discovery()
 
 
 urlpatterns = patterns('',
-                       url(r"^my/", include(dashboard.urls)),
-                       url(r'^admin/', include(admin.site.urls)),
-                       url(r"^", include("daarmaan.server.urls")),
+    url(r"^my/", include('vanda.apps.dashboard.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r"^", include("daarmaan.server.urls")),
 
 )
 

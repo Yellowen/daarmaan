@@ -200,7 +200,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     # Project information contexts
     "daarmaaninterface.projinfo.info",
-    "vanda.apps.dashboard.context_processors.dashboard",
 
 )
 
