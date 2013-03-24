@@ -15,6 +15,7 @@
     .gradient-radial(@contentColor1, @contentColor2);
 }
 
+// HEADER ---------------
 header {
     color: @grayLighter;
     position: absolute;
@@ -24,25 +25,54 @@ header {
 
 }
 
+.black {
+    background: @black;
+}
+
 nav {
     ul {
 	list-style: none;
+	margin: 5px 10px;
 	li {
-	    margin: 0 10px;
 	    display: inline;
 	    a, a:visited{
 		color: @grayLight;
 		.transition(color 300ms linear 0ms)
 	    }
-	    a:hover, a:active {
+	    a:visited, a:active, a:focus, a:hover{
+		text-decoration: none;
+	    }
+	    a:hover{
 		color: @grayLighter;
 		text-decoration: none;
 		.transition(color 300ms linear 0ms)
 	    }
+	    a:visited {
+		color: @grayLight;
+	    }
+	    a:focus, a:active {
+		color: @grayLighter;
+	    }
+
 	}
     }
 }
 
+.nav {
+    ul {
+	li {
+	    margin-left: 15px;
+	    margin-right: 15px;
+	    a:visited, a:active, a:focus, a:hover {
+		text-decoration: none;
+	    }
+
+	}
+    }
+    .box-shadow(0 1px 3px rgba(0, 0, 0, 1));
+}
+
+// FOOTER ----------------
 footer {
     width: 100%;
     color: @textColor;
@@ -115,9 +145,23 @@ footer {
     list-style: none;
     .text-error;
 }
+
 #recaptcha_widget {
     margin-top: 10px;
     .captcha_link {
 	.dir-padding-right(10px);
     }
+}
+
+#notification-area {
+    .icon-spin {
+	height: none;
+    }
+}
+
+#drawer {
+    background: @black;
+    width: 100%;
+    padding: 20px;
+    height: 200px;
 }
