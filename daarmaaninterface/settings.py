@@ -250,3 +250,8 @@ except ImportError:
     pass
 
 EMAIL_VERIFICATION = True
+
+
+DJAMO = {
+    "name": "daarmaan",
+}
