@@ -144,7 +144,6 @@ INSTALLED_APPS = (
     'vanda.apps.dashboard',
     'vanda.js.less',
     'captcha',
-
 )
 
 # A sample logging configuration. The only tangible logging
