@@ -18,7 +18,7 @@
 # -----------------------------------------------------------------------------
 from urllib import urlencode
 
-from django.http import HttpResponsePermanentRedirect
+from django.http import HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.contrib.auth import logout as django_logout
 from django.conf import settings
 
@@ -39,3 +39,18 @@ def logout(request):
                              next_url)
 
     return HttpResponsePermanentRedirect(url)
+
+
+def login(request):
+    """
+    Redirect user to remote Daarmaan login page.
+    """
+    import urllib
+
+    host = "http://%s" % request.get_host()
+    next_ = urllib.quote_plus(request.GET.get("next", host))
+
+    next_url = "%s?%s" % (settings.DAARMAAN_LOGIN_PAGE,
+                          urlencode({"next": next_}))
+
+    return HttpResponsePermanentRedirect(next_url)
