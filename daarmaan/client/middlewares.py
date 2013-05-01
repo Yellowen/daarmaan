@@ -53,11 +53,11 @@ class DaarmaanAuthMiddleware(object):
             logger.debug("User is authenticated")
             return None
 
+        # Exclude the urls in the DAARMAAN_EXCLUDE_URLS list from
+        # authentication checks
         if hasattr(settings, "DAARMAAN_EXCLUDE_URLS"):
             for pattern in settings.DAARMAAN_EXCLUDE_URLS:
-                print ">>> ", pattern
                 if re.match(pattern, request.path):
-                    print "matched"
                     return None
 
         # If redirected key exists in user session it means that

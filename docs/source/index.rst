@@ -11,13 +11,14 @@ Welcome to Daarmaan's documentation!
 Daarmaan is Single Sign On (`SSO <http://en.wikipedia.org/wiki/Single_sign-on>`_) service.
 Contents:
 
-.. toctree::
-   :maxdepth: 2
-   :titlesonly:
+   :doc:`quickstart`
+      Quick start guide to setup and use Daarmaan as fast as possible.
 
-   Quick start <quickstart.rst>
-   Developer Mini Guide <devguide.rst>
-   FAQ <faq.rst>
+   :doc:`faq`
+      Frequently asked questions about Daarmaan
+
+   :doc:`settings`
+      Daarmaan related Django settings.
 
 Indices and tables
 ==================
@@ -25,4 +26,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
