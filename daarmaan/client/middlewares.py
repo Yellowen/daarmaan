@@ -25,11 +25,12 @@ import re
 
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.auth.signals import user_logged_in
 
 from daarmaan.client.models import SSOSession
+from daarmaan.utils import DefaultValidation
 
 
 logger = logging.getLogger('django')
@@ -48,10 +49,6 @@ class DaarmaanAuthMiddleware(object):
         # Stay with redirection only
 
         logger.info("Daarmaan middleware engaged.")
-        # If user was authenticated we don't need to check for SSO status
-        if request.user.is_authenticated():
-            logger.debug("User is authenticated")
-            return None
 
         # Exclude the urls in the DAARMAAN_EXCLUDE_URLS list from
         # authentication checks
@@ -73,13 +70,22 @@ class DaarmaanAuthMiddleware(object):
 
         logger.debug("[TICKET]: %s" % ticket)
         logger.debug("[ACK]: %s" % ack)
+
         # If ack key exists in request.GET user was not authenticated
         # in SSO service
         if ack:
+            # If user was authenticated we don't need to check for SSO status
+            if request.user.is_authenticated():
+                logger.debug("User is authenticated in current service but"
+                             "not in server")
+
+                logout(request)
+
             path = self._striped_path(request)
             logger.debug("ACK is present")
             request.session["redirected"] = request.path.split("?")[0]
             return HttpResponseRedirect(path)
+
 
         # Existance of ticket parameter means that user authenticated
         # in SSO system
@@ -87,13 +93,15 @@ class DaarmaanAuthMiddleware(object):
             logger.debug("TICKET is present")
             hash_ = request.GET.get("hash", "")
 
-            # Use the SSO authentication backend to authenticate the user
-            # and token
-            user = authenticate(request=request, token=ticket, hash_=hash_)
+            if not request.user.is_authenticated():
 
-            # If user was valid log him/her in
-            if user:
-                self.login(request, user, ticket)
+                # Use the SSO authentication backend to authenticate the user
+                # and token
+                user = authenticate(request=request, token=ticket, hash_=hash_)
+
+                # If user was valid log him/her in
+                if user:
+                    self.login(request, user, ticket)
 
             path = self._striped_path(request)
 

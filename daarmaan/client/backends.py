@@ -122,7 +122,6 @@ class DaarmaanBackend(object):
             response = urllib2.urlopen(url)
         except urllib2.URLError, e:
             # TODO: Handle the situation on urlerror
-            print ">>>> ", e
             response = None
 
         if response:

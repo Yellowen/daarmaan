@@ -4,6 +4,7 @@ import sys
 
 try:
     import dev_script
+
 except ImportError:
     pass
 
