@@ -90,22 +90,24 @@ class IndexPage(object):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             remember = form.cleaned_data.get("remember_me", False)
-            next_url = form.cleaned_data.get("next", None)
+            next_url = form.cleaned_data.get("next_", None)
 
             # Authenticate the user
             user = authenticate(username=username,
-                               password=password)
+                                password=password)
             if user is not None:
                 if user.is_active:
                     login(request, user)
                     self._setup_session(request)
-
+                    print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ", user
                     if next_url:
-                        return HttpResponseRedirect(next_url)
+                        import urllib
+                        return HttpResponseRedirect(
+                            urllib.unquote_plus(next_url)
+                        )
 
-                    return redirect(reverse(
-                        "dashboard-index",
-                        args=[]))
+                    return redirect(reverse("dashboard-index", args=[]))
+
                 else:
                     return rr(self.template,
                               {"form": form,

@@ -23,4 +23,7 @@ from django.conf.urls.defaults import patterns, include, url
 urlpatterns = patterns('',
         url(r'^logout/$', 'daarmaan.client.views.logout',
             name="logout"),
+        url(r'^login/$', 'daarmaan.client.views.login',
+            name="login"),
+
 )

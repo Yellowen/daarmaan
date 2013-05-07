@@ -1,3 +1,6 @@
 * Create the password change view on /my/change/password/
 * Create a service oriented user data json serialized package for sending to each service
 * Minify all the js files
+
+* Bugs
+  ** User does not stay login after redirection (session id changed each time) issue: cleaning session after browser close

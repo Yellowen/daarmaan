@@ -33,6 +33,7 @@ class LoginForm(forms.Form):
                                label=_("password"),
                                widget=forms.PasswordInput())
     remember_me = forms.BooleanField(label=_("Remember me"), required=False)
+    next_ = forms.CharField(required=False)
 
 
 class PreRegistrationForm(forms.Form):
