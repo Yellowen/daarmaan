@@ -53,4 +53,5 @@ def login(request):
     next_url = "%s?%s" % (settings.DAARMAAN_LOGIN_PAGE,
                           urlencode({"next": next_}))
 
-    return HttpResponsePermanentRedirect(next_url)
+    #return HttpResponsePermanentRedirect(next_url)
+    return HttpResponseRedirect(next_url)

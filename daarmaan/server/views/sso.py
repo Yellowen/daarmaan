@@ -72,20 +72,25 @@ class DaarmaanServer(object):
 
         next_url = request.GET.get("next", None)
 
+        # Get the service name from request
         service = self._get_service(request)
 
         if not service:
             return HttpResponseForbidden("Invalid service")
 
         validator = DefaultValidation(service.key)
+
         try:
             next_url = urlparse(urllib.unquote(next_url).decode("utf8"))
+
         except AttributeError:
             if "HTTP_REFERER" in request.META:
                 next_url = urlparse(request.META["REFERER"])
+
             else:
                 next_url = urlparse(service.default_url)
 
+        # Retreive the referer GET parameters and make a new one
         params = dict(parse_qsl(next_url[4]))
 
         # Does user authenticated before?
@@ -93,6 +98,8 @@ class DaarmaanServer(object):
             logger.debug("User is authenticated.")
             # If user is authenticated in Daarmaan then a ticket
             # (user session ID) will send back to service
+
+            # IMPORTANT: is using session id of daarmaan as ticket ok?
             ticket = request.session.session_key
             logger.debug("[TICKET]: %s" % ticket)
             params.update({'ticket': ticket,

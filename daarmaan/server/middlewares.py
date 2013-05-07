@@ -1,5 +1,3 @@
-
-
 import time
 
 from django.conf import settings
@@ -13,9 +11,7 @@ class SessionMiddleware(object):
     def process_request(self, request):
         engine = import_module(settings.SESSION_ENGINE)
 
-        print "TEST: cookies: ", request.COOKIES
         session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME, None)
-        print "TEST: key: ", session_key
         request.session = engine.SessionStore(session_key)
 
     def process_response(self, request, response):

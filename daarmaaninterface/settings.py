@@ -161,7 +161,7 @@ LOGGING = {
         },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
             },
@@ -203,14 +203,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 # Daarmaan Version.
-VERSION = "0.5.31"
+VERSION = "2.67"
 
-# Session will not expired with browser close
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 1209600
-## SESSION_COOKIE_DOMAIN =  ".yellowen.com"
-## CSRF_COOKIE_DOMAIN = "yellowen.com"
-## SESSION_COOKIE_NAME = "sessionticket"
+SESSION_COOKIE_NAME = "daarmaan_id"
 
 LOGIN_URL = "/"
 LOGOUT_URL = "/logout/"

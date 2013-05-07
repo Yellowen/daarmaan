@@ -122,5 +122,3 @@ dashboard.register(AddWidgetButton())
 dashboard.add_widget_to('header', AddWidgetButton())
 dashboard.register(SettingButton())
 dashboard.add_widget_to('header', SettingButton())
-
-print  "<<<<<<<<<<<< ", dashboard.save_config()

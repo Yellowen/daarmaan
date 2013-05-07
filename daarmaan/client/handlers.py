@@ -25,6 +25,5 @@ class SSOEventHandler(EventHandler):
 
     def on_logout(self, sender, session_id):
         session = SessionStore(session_key=session_id)
-        print ">>>> ", session
 
 handlers.register(SSOEventHandler())

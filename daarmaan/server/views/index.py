@@ -63,8 +63,11 @@ class IndexPage(object):
         """
         Index view.
         """
+
         if request.user.is_authenticated():
-            return HttpResponseRedirect(reverse('dashboard-index'))
+            next_ = request.GET.get("next", None)
+            if not next_:
+                return HttpResponseRedirect(reverse('dashboard-index'))
 
         if request.method == "POST":
             return self.login(request)
@@ -99,7 +102,6 @@ class IndexPage(object):
                 if user.is_active:
                     login(request, user)
                     self._setup_session(request)
-                    print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ", user
                     if next_url:
                         import urllib
                         return HttpResponseRedirect(
@@ -168,7 +170,6 @@ class IndexPage(object):
                             verification_link = reverse("verificate",
                                                         args=[verif_code])
 
-                            print ">>> ", verification_link
                             self.send_verification_mail(user,
                                                         verification_link)
 
@@ -300,7 +301,6 @@ class IndexPage(object):
                         "dashboard-index",
                         args=[]))
 
-            print ">>> ", msg
             return rr(self.new_user_form_template,
                       {"form": form,
                        "user": verified_code.user,
