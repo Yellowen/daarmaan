@@ -249,3 +249,8 @@ EMAIL_VERIFICATION = True
 DJAMO = {
     "name": "daarmaan",
 }
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
